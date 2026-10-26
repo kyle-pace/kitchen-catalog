@@ -12,6 +12,11 @@ same thing: `chicken-leg-quarters`.
   - `sections`: store sections, in shopping order.
 - Swift (`import KitchenCatalog`): `Catalog.shared.match("Onion - Green")` -> `green-onion`, strong.
 - JavaScript (`js/catalog.mjs`): `match(load(), text)`, the same rules, for the Friday run and the site.
+- Swift only (`Sources/KitchenCatalog/Text/`): `Parser` (recipe lines to name, alternates and prep), `Names`,
+  `NameMatcher` (alias lookup, then a shortlist, over any list of `MatchableItem`s), `Resolution` and `Kinds`
+  (what kind of thing an item is, so like things sit together). Moved here from On Hand's PantryKit on
+  2026-10-25 so Grocery Deals can use them too. They have no JavaScript twin, so the parity rule below
+  doesn't cover them.
 - `tools/seed.py`: made the first version from Pantry's `pantry.json` and Deals' `config/items.json`.
 
 ## Rules
