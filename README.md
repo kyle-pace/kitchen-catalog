@@ -1,0 +1,38 @@
+# KitchenCatalog
+
+The shared list of grocery items for **Pantry** and **Grocery Deals**, so "Leg quarters, 10 lb"
+on a Lam's flyer, "chicken leg quarters" in the pantry and the reminder on your list are all the
+same thing: `chicken-leg-quarters`.
+
+- `Sources/KitchenCatalog/Resources/catalog.json`: the catalog. **The source of truth.** Edit it by hand.
+  - `items`: id -> `name`, `section` (store section), `aliases` (other ways people and flyers write it),
+    optional `parent` (a more general item: `onions-yellow` -> `onion`), `also` (older ids for the
+    same thing, so earlier data still links up), and `deals` (Grocery Deals' `staple`/`benchmark`).
+  - `sections`: store sections, in shopping order.
+- Swift (`import KitchenCatalog`): `Catalog.shared.match("Onion - Green")` -> `green-onion`, strong.
+- JavaScript (`js/catalog.mjs`): `match(load(), text)`, the same rules, for the Friday run and the site.
+- `tools/seed.py`: made the first version from Pantry's `pantry.json` and Deals' `config/items.json`.
+
+## Rules
+
+- **Ids never change.** Rename with `name`; merge by moving the old id into the survivor's `also`.
+- Apps **store the id** and show the name. Status, amounts, notes and **deals are layers on top**,
+  keyed by id. The Reminders list holds the item's name, never prices.
+- Matching: the longest name or alias found wins, scored so specific beats general. A match is
+  **strong** when the item is what the product is (its last noun, give or take sizes, cuts and words
+  like "organic"), and **weak** when it's only mentioned ("Shrimp Chips"). Automated jobs fill in
+  strong matches only and send weak ones for review.
+- The Swift and JS matchers must agree: `swift test` and `node js/test.mjs` run the same cases.
+- `node js/coverage.mjs <weeks dir>` reports how much of a set of deal rows the catalog recognizes.
+
+## Using it in the Grocery Deals Friday run
+
+1. In `draft-week.mjs`, after reading each flyer line: `const m = match(catalog, item)`. If `m.strength === "strong"`,
+   set `item_key = m.id` (or keep the existing key when `m.item.also` includes it). Put weak and missing
+   matches in the draft report's `review` list.
+2. Show `catalog.items[item_key].name` on the site and in the app, so names read the same everywhere.
+3. Group and compare prices by `item_key`; use `parent` to roll specific items up ("all onions").
+4. When a deal is added to the list, pass the id (and only the id) to Pantry.
+
+First run, the last three weeks (1,016 deal rows): 332 strong matches (Deals' own keys covered 300),
+and the catalog agreed with 274 of those 300.
