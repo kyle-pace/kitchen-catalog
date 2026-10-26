@@ -67,7 +67,8 @@
    "aliases": [],
    "deals": {
     "staple": false
-   }
+   },
+   "popularity": "specialty"
   },
   "acini-di-pepe": {
    "name": "Acini di Pepe",
@@ -93,7 +94,8 @@
     "ap flour",
     "flour",
     "plain flour"
-   ]
+   ],
+   "popularity": "everyday"
   },
   "allspice": {
    "name": "Allspice",
@@ -144,7 +146,8 @@
    ],
    "deals": {
     "staple": true
-   }
+   },
+   "popularity": "everyday"
   },
   "arborio-rice": {
    "name": "Arborio Rice",
@@ -159,7 +162,8 @@
   "asafetida": {
    "name": "Asafetida",
    "section": "spices",
-   "aliases": []
+   "aliases": [],
+   "popularity": "specialty"
   },
   "asian-greens": {
    "name": "Asian Greens",
@@ -189,14 +193,16 @@
    ],
    "deals": {
     "staple": true
-   }
+   },
+   "popularity": "everyday"
   },
   "baby-spinach": {
    "name": "Baby Spinach",
    "section": "produce",
    "aliases": [
     "spinach"
-   ]
+   ],
+   "popularity": "everyday"
   },
   "bacon": {
    "name": "Bacon",
@@ -205,7 +211,8 @@
    "deals": {
     "staple": true,
     "benchmark": "bacon"
-   }
+   },
+   "popularity": "everyday"
   },
   "baking-extracts-and-waters": {
    "name": "Baking Extracts and Waters",
@@ -248,12 +255,14 @@
    "deals": {
     "staple": true,
     "benchmark": "bananas"
-   }
+   },
+   "popularity": "everyday"
   },
   "basmati-rice": {
    "name": "Basmati Rice",
    "section": "pantry",
-   "aliases": []
+   "aliases": [],
+   "popularity": "everyday"
   },
   "bay-leaf": {
    "name": "Bay Leaf",
@@ -291,7 +300,8 @@
    "aliases": [],
    "deals": {
     "staple": false
-   }
+   },
+   "popularity": "specialty"
   },
   "beef-ground": {
    "name": "Ground beef",
@@ -300,7 +310,8 @@
    "deals": {
     "staple": true,
     "benchmark": "ground-beef"
-   }
+   },
+   "popularity": "everyday"
   },
   "beef-omasum": {
    "name": "Beef omasum",
@@ -310,7 +321,8 @@
    ],
    "deals": {
     "staple": false
-   }
+   },
+   "popularity": "specialty"
   },
   "beef-ribs": {
    "name": "Beef back ribs",
@@ -383,7 +395,8 @@
    "deals": {
     "staple": true,
     "benchmark": "beef-steaks"
-   }
+   },
+   "popularity": "everyday"
   },
   "beef-stew": {
    "name": "Beef stew meat",
@@ -398,6 +411,15 @@
     "benchmark": "beef-stew"
    }
   },
+  "beef-tendon": {
+   "name": "Beef tendon",
+   "section": "meat",
+   "aliases": [
+    "beef tendons",
+    "tendon"
+   ],
+   "popularity": "specialty"
+  },
   "beets": {
    "name": "Beets",
    "section": "dairy-eggs",
@@ -409,7 +431,8 @@
    "aliases": [],
    "deals": {
     "staple": true
-   }
+   },
+   "popularity": "specialty"
   },
   "black-pepper": {
    "name": "Black Pepper",
@@ -428,7 +451,8 @@
   "black-slab-sugar": {
    "name": "Black Slab Sugar",
    "section": "pantry",
-   "aliases": []
+   "aliases": [],
+   "popularity": "specialty"
   },
   "black-vinegar": {
    "name": "Black Vinegar",
@@ -445,7 +469,8 @@
    "aliases": [],
    "deals": {
     "staple": true
-   }
+   },
+   "popularity": "everyday"
   },
   "bratwurst": {
    "name": "Bratwurst",
@@ -485,7 +510,8 @@
    "deals": {
     "staple": false,
     "benchmark": "butter"
-   }
+   },
+   "popularity": "everyday"
   },
   "canned-chickpeas": {
    "name": "Canned Chickpeas",
@@ -506,12 +532,14 @@
     "san marzano tomatoes",
     "tomatoes, canned",
     "whole peeled tomatoes"
-   ]
+   ],
+   "popularity": "everyday"
   },
   "canned-tuna": {
    "name": "Canned Tuna",
    "section": "pantry",
-   "aliases": []
+   "aliases": [],
+   "popularity": "everyday"
   },
   "capers": {
    "name": "Capers",
@@ -534,7 +562,8 @@
    ],
    "deals": {
     "staple": true
-   }
+   },
+   "popularity": "everyday"
   },
   "cashews": {
    "name": "Cashews",
@@ -569,7 +598,8 @@
     "celery",
     "celery ribs",
     "celery stalks"
-   ]
+   ],
+   "popularity": "everyday"
   },
   "char-siu-sauce": {
    "name": "Char Siu Sauce",
@@ -584,7 +614,8 @@
     "mozzarella",
     "parmesan",
     "parmigiano-reggiano"
-   ]
+   ],
+   "popularity": "everyday"
   },
   "cheese-cheddar": {
    "name": "Cheddar cheese",
@@ -596,7 +627,8 @@
    "deals": {
     "staple": false,
     "benchmark": "cheddar"
-   }
+   },
+   "popularity": "everyday"
   },
   "cheese-other": {
    "name": "Cheese (specialty)",
@@ -628,7 +660,8 @@
    "deals": {
     "staple": true,
     "benchmark": "chicken-breast-boneless"
-   }
+   },
+   "popularity": "everyday"
   },
   "chicken-broth-concentrate": {
    "name": "Chicken Broth Concentrate",
@@ -650,7 +683,8 @@
    "deals": {
     "staple": true,
     "benchmark": "chicken-legs"
-   }
+   },
+   "popularity": "everyday"
   },
   "chicken-feet": {
    "name": "Chicken feet",
@@ -658,7 +692,8 @@
    "aliases": [],
    "deals": {
     "staple": false
-   }
+   },
+   "popularity": "specialty"
   },
   "chicken-leg-quarters": {
    "name": "Chicken Leg Quarters",
@@ -671,7 +706,8 @@
    "deals": {
     "staple": true,
     "benchmark": "chicken-legs"
-   }
+   },
+   "popularity": "everyday"
   },
   "chicken-stewing": {
    "name": "Stewing chicken",
@@ -689,7 +725,8 @@
    ],
    "deals": {
     "staple": true
-   }
+   },
+   "popularity": "everyday"
   },
   "chicken-whole": {
    "name": "Whole chicken",
@@ -701,7 +738,8 @@
    "deals": {
     "staple": true,
     "benchmark": "chicken-whole"
-   }
+   },
+   "popularity": "everyday"
   },
   "chicken-wings": {
    "name": "Chicken wings",
@@ -711,7 +749,8 @@
    ],
    "deals": {
     "staple": true
-   }
+   },
+   "popularity": "everyday"
   },
   "chili-bamboo-shoot-slices": {
    "name": "Chili Bamboo Shoot Slices",
@@ -825,7 +864,8 @@
    ],
    "deals": {
     "staple": true
-   }
+   },
+   "popularity": "everyday"
   },
   "coffee": {
    "name": "Coffee",
@@ -834,7 +874,8 @@
    "deals": {
     "staple": false,
     "benchmark": "coffee-ground"
-   }
+   },
+   "popularity": "everyday"
   },
   "cooked-beans": {
    "name": "Cooked Beans",
@@ -853,7 +894,8 @@
    "parent": "olive-oil",
    "deals": {
     "staple": true
-   }
+   },
+   "popularity": "everyday"
   },
   "cooking-spray": {
    "name": "Cooking Spray",
@@ -920,7 +962,8 @@
    ],
    "deals": {
     "staple": true
-   }
+   },
+   "popularity": "everyday"
   },
   "cumin": {
    "name": "Cumin",
@@ -968,7 +1011,8 @@
    "aliases": [],
    "deals": {
     "staple": true
-   }
+   },
+   "popularity": "specialty"
   },
   "daikon": {
    "name": "Daikon",
@@ -1049,12 +1093,14 @@
   "dried-lily-flowers": {
    "name": "Dried Lily Flowers",
    "section": "international",
-   "aliases": []
+   "aliases": [],
+   "popularity": "specialty"
   },
   "dried-morel-mushrooms": {
    "name": "Dried Morel Mushrooms",
    "section": "international",
-   "aliases": []
+   "aliases": [],
+   "popularity": "specialty"
   },
   "dried-oregano": {
    "name": "Dried Oregano",
@@ -1077,7 +1123,8 @@
     "rigatoni",
     "rotini",
     "spaghetti"
-   ]
+   ],
+   "popularity": "everyday"
   },
   "dried-red-dates": {
    "name": "Dried Red Dates",
@@ -1152,7 +1199,8 @@
    "deals": {
     "staple": true,
     "benchmark": "eggs"
-   }
+   },
+   "popularity": "everyday"
   },
   "enjuku-koji-miso": {
    "name": "Enjuku Koji Miso",
@@ -1221,7 +1269,8 @@
   "foie-gras": {
    "name": "Foie Gras",
    "section": "pantry",
-   "aliases": []
+   "aliases": [],
+   "popularity": "specialty"
   },
   "four-fruits-preserves": {
    "name": "Four Fruits Preserves",
@@ -1278,7 +1327,8 @@
    ],
    "deals": {
     "staple": true
-   }
+   },
+   "popularity": "specialty"
   },
   "galunggong": {
    "name": "Galunggong (mackerel scad)",
@@ -1288,7 +1338,8 @@
    ],
    "deals": {
     "staple": true
-   }
+   },
+   "popularity": "specialty"
   },
   "garam-masala": {
    "name": "Garam Masala",
@@ -1301,7 +1352,8 @@
    "aliases": [
     "cloves garlic",
     "garlic cloves"
-   ]
+   ],
+   "popularity": "everyday"
   },
   "garlic-powder": {
    "name": "Garlic Powder",
@@ -1323,7 +1375,8 @@
    "aliases": [],
    "deals": {
     "staple": false
-   }
+   },
+   "popularity": "specialty"
   },
   "ghee": {
    "name": "Ghee",
@@ -1337,7 +1390,8 @@
     "fresh ginger",
     "ginger root",
     "gingerroot"
-   ]
+   ],
+   "popularity": "everyday"
   },
   "glutinous-rice": {
    "name": "Glutinous Rice",
@@ -1358,7 +1412,8 @@
    "aliases": [],
    "deals": {
     "staple": false
-   }
+   },
+   "popularity": "specialty"
   },
   "gochugaru": {
    "name": "Gochugaru",
@@ -1405,7 +1460,8 @@
    },
    "also": [
     "cabbage-green"
-   ]
+   ],
+   "popularity": "everyday"
   },
   "green-curry-paste": {
    "name": "Green Curry Paste",
@@ -1427,7 +1483,8 @@
     "scallions",
     "spring onion",
     "spring onions"
-   ]
+   ],
+   "popularity": "everyday"
   },
   "ground-cinnamon": {
    "name": "Ground Cinnamon",
@@ -1457,7 +1514,8 @@
    },
    "also": [
     "pork-ground"
-   ]
+   ],
+   "popularity": "everyday"
   },
   "haiga-rice": {
    "name": "Haiga Rice",
@@ -1556,7 +1614,8 @@
    },
    "also": [
     "rice-jasmine"
-   ]
+   ],
+   "popularity": "everyday"
   },
   "kashmiri-chili-powder": {
    "name": "Kashmiri Chili Powder",
@@ -1656,7 +1715,8 @@
    "deals": {
     "staple": true,
     "benchmark": "lemons"
-   }
+   },
+   "popularity": "everyday"
   },
   "lemons-and-limes": {
    "name": "Lemons and Limes",
@@ -1670,7 +1730,8 @@
     "lime juice",
     "lime zest",
     "limes"
-   ]
+   ],
+   "popularity": "everyday"
   },
   "lentils": {
    "name": "Lentils",
@@ -1680,7 +1741,8 @@
   "lettuce": {
    "name": "Lettuce",
    "section": "produce",
-   "aliases": []
+   "aliases": [],
+   "popularity": "everyday"
   },
   "lettuce-iceberg": {
    "name": "Iceberg lettuce",
@@ -1692,7 +1754,8 @@
    "deals": {
     "staple": true,
     "benchmark": "lettuce-iceberg"
-   }
+   },
+   "popularity": "everyday"
   },
   "lettuce-romaine": {
    "name": "Romaine lettuce",
@@ -1704,7 +1767,8 @@
    "deals": {
     "staple": true,
     "benchmark": "lettuce-romaine"
-   }
+   },
+   "popularity": "everyday"
   },
   "limes": {
    "name": "Limes",
@@ -1714,7 +1778,8 @@
    ],
    "deals": {
     "staple": true
-   }
+   },
+   "popularity": "everyday"
   },
   "liquid-smoke": {
    "name": "Liquid Smoke",
@@ -1744,7 +1809,8 @@
    "section": "pantry",
    "aliases": [
     "malt sugar"
-   ]
+   ],
+   "popularity": "specialty"
   },
   "mama-lils-pickled-peppers": {
    "name": "Mama Lil's Pickled Peppers",
@@ -1764,7 +1830,8 @@
    ],
    "deals": {
     "staple": true
-   }
+   },
+   "popularity": "everyday"
   },
   "maple-syrup": {
    "name": "Maple Syrup",
@@ -1801,7 +1868,8 @@
    "deals": {
     "staple": false,
     "benchmark": "milk-whole"
-   }
+   },
+   "popularity": "everyday"
   },
   "mirin": {
    "name": "Mirin",
@@ -1850,7 +1918,8 @@
    ],
    "deals": {
     "staple": true
-   }
+   },
+   "popularity": "everyday"
   },
   "mustard-seeds": {
    "name": "Mustard Seeds",
@@ -1878,7 +1947,8 @@
    },
    "also": [
     "cabbage-napa"
-   ]
+   ],
+   "popularity": "everyday"
   },
   "neutral-oil": {
    "name": "Neutral Oil",
@@ -1887,12 +1957,14 @@
     "avocado oil",
     "grapeseed oil",
     "neutral cooking oil"
-   ]
+   ],
+   "popularity": "everyday"
   },
   "nishiki-short-grain-rice": {
    "name": "Nishiki Short Grain Rice",
    "section": "pantry",
-   "aliases": []
+   "aliases": [],
+   "popularity": "everyday"
   },
   "nonfat-dry-milk-powder": {
    "name": "Nonfat Dry Milk Powder",
@@ -1928,7 +2000,8 @@
   "oats": {
    "name": "Oats",
    "section": "pantry",
-   "aliases": []
+   "aliases": [],
+   "popularity": "everyday"
   },
   "olive-oil": {
    "name": "Olive Oil",
@@ -1937,7 +2010,8 @@
     "evoo",
     "extra virgin olive oil",
     "extra-virgin olive oil"
-   ]
+   ],
+   "popularity": "everyday"
   },
   "olives": {
    "name": "Olives",
@@ -1952,7 +2026,8 @@
     "onions",
     "sweet onion",
     "white onion"
-   ]
+   ],
+   "popularity": "everyday"
   },
   "onion-powder": {
    "name": "Onion Powder",
@@ -1971,7 +2046,8 @@
    "parent": "onion",
    "deals": {
     "staple": true
-   }
+   },
+   "popularity": "everyday"
   },
   "oranges-navel": {
    "name": "Navel oranges",
@@ -1982,7 +2058,8 @@
    "deals": {
     "staple": true,
     "benchmark": "oranges-navel"
-   }
+   },
+   "popularity": "everyday"
   },
   "orzo": {
    "name": "Orzo",
@@ -2039,7 +2116,8 @@
   "peanut-butter": {
    "name": "Peanut Butter",
    "section": "pantry",
-   "aliases": []
+   "aliases": [],
+   "popularity": "everyday"
   },
   "peanut-oil": {
    "name": "Peanut Oil",
@@ -2164,7 +2242,8 @@
    "deals": {
     "staple": true,
     "benchmark": "pork-chops"
-   }
+   },
+   "popularity": "everyday"
   },
   "pork-feet": {
    "name": "Pork feet",
@@ -2174,7 +2253,8 @@
    ],
    "deals": {
     "staple": false
-   }
+   },
+   "popularity": "specialty"
   },
   "pork-hock": {
    "name": "Pork hock or shank",
@@ -2185,7 +2265,8 @@
    ],
    "deals": {
     "staple": false
-   }
+   },
+   "popularity": "specialty"
   },
   "pork-leg": {
    "name": "Pork leg",
@@ -2203,7 +2284,8 @@
    "deals": {
     "staple": true,
     "benchmark": "pork-other"
-   }
+   },
+   "popularity": "everyday"
   },
   "pork-loin-sliced": {
    "name": "Pork loin, thin sliced",
@@ -2273,7 +2355,8 @@
     "russet potatoes",
     "sweet potatoes",
     "yukon gold potatoes"
-   ]
+   ],
+   "popularity": "everyday"
   },
   "potatoes-red-yellow": {
    "name": "Red or yellow potatoes",
@@ -2286,7 +2369,8 @@
    "deals": {
     "staple": true,
     "benchmark": "potatoes"
-   }
+   },
+   "popularity": "everyday"
   },
   "potatoes-russet": {
    "name": "Russet potatoes",
@@ -2297,7 +2381,8 @@
    "deals": {
     "staple": true,
     "benchmark": "potatoes"
-   }
+   },
+   "popularity": "everyday"
   },
   "potstickers": {
    "name": "Potstickers",
@@ -2347,7 +2432,8 @@
    "deals": {
     "staple": true,
     "benchmark": "rice-white"
-   }
+   },
+   "popularity": "everyday"
   },
   "rice-medium-grain": {
    "name": "Rice, medium grain (Calrose)",
@@ -2358,7 +2444,8 @@
    "deals": {
     "staple": true,
     "benchmark": "rice-white"
-   }
+   },
+   "popularity": "everyday"
   },
   "rice-paper": {
    "name": "Rice Paper",
@@ -2384,7 +2471,8 @@
    "section": "spices",
    "aliases": [
     "saffron threads"
-   ]
+   ],
+   "popularity": "specialty"
   },
   "sake": {
    "name": "Sake",
@@ -2397,12 +2485,14 @@
   "salad-greens": {
    "name": "Salad Greens",
    "section": "produce",
-   "aliases": []
+   "aliases": [],
+   "popularity": "everyday"
   },
   "salade-oceane": {
    "name": "Salade Oceane",
    "section": "international",
-   "aliases": []
+   "aliases": [],
+   "popularity": "specialty"
   },
   "salmon-atlantic": {
    "name": "Atlantic salmon",
@@ -2410,7 +2500,8 @@
    "aliases": [],
    "deals": {
     "staple": true
-   }
+   },
+   "popularity": "everyday"
   },
   "salmon-other": {
    "name": "Salmon (other)",
@@ -2451,7 +2542,8 @@
   "sand-ginger": {
    "name": "Sand Ginger",
    "section": "spices",
-   "aliases": []
+   "aliases": [],
+   "popularity": "specialty"
   },
   "savory-spice-rubs": {
    "name": "Savory Spice Rubs",
@@ -2471,7 +2563,8 @@
   "seaweed-tartare": {
    "name": "Seaweed Tartare",
    "section": "international",
-   "aliases": []
+   "aliases": [],
+   "popularity": "specialty"
   },
   "sesame-oil": {
    "name": "Sesame Oil",
@@ -2499,7 +2592,8 @@
    "aliases": [
     "baby bok choy",
     "bok choy"
-   ]
+   ],
+   "popularity": "everyday"
   },
   "shaoxing-wine": {
    "name": "Shaoxing Wine",
@@ -2550,7 +2644,8 @@
    },
    "also": [
     "rice-short-grain"
-   ]
+   ],
+   "popularity": "everyday"
   },
   "shredded-preserved-radish": {
    "name": "Shredded Preserved Radish",
@@ -2574,7 +2669,8 @@
    ],
    "deals": {
     "staple": true
-   }
+   },
+   "popularity": "everyday"
   },
   "sichuan-peppercorn": {
    "name": "Sichuan Peppercorn",
@@ -2593,7 +2689,8 @@
     "regular soy sauce",
     "shoyu",
     "usukuchi"
-   ]
+   ],
+   "popularity": "everyday"
   },
   "spicy-citrus-tube": {
    "name": "Spicy Citrus Tube",
@@ -2680,7 +2777,8 @@
    ],
    "deals": {
     "staple": true
-   }
+   },
+   "popularity": "everyday"
   },
   "tahini": {
    "name": "Tahini",
@@ -2749,7 +2847,8 @@
   "tinned-eel-and-saury": {
    "name": "Tinned Eel and Saury",
    "section": "pantry",
-   "aliases": []
+   "aliases": [],
+   "popularity": "specialty"
   },
   "tinned-sardines": {
    "name": "Tinned Sardines",
@@ -2786,7 +2885,8 @@
    ],
    "deals": {
     "staple": false
-   }
+   },
+   "popularity": "everyday"
   },
   "tomato-paste": {
    "name": "Tomato Paste",
@@ -2804,7 +2904,8 @@
    "deals": {
     "staple": true,
     "benchmark": "tomatoes"
-   }
+   },
+   "popularity": "everyday"
   },
   "tonkatsu-sauce": {
    "name": "Tonkatsu Sauce",
@@ -2821,7 +2922,8 @@
   "tsaoko": {
    "name": "Tsaoko",
    "section": "spices",
-   "aliases": []
+   "aliases": [],
+   "popularity": "specialty"
   },
   "turmeric": {
    "name": "Turmeric",
@@ -2881,7 +2983,8 @@
    "aliases": [],
    "deals": {
     "staple": true
-   }
+   },
+   "popularity": "specialty"
   },
   "wheat-flour": {
    "name": "Wheat Flour",
@@ -2910,7 +3013,8 @@
    "aliases": [
     "caster sugar",
     "granulated sugar"
-   ]
+   ],
+   "popularity": "everyday"
   },
   "white-vinegar": {
    "name": "White Vinegar",
@@ -2975,7 +3079,8 @@
    ],
    "deals": {
     "staple": false
-   }
+   },
+   "popularity": "everyday"
   },
   "yoka-miso": {
    "name": "Yoka Miso",

@@ -7,7 +7,8 @@ same thing: `chicken-leg-quarters`.
 - `Sources/KitchenCatalog/Resources/catalog.json`: the catalog. **The source of truth.** Edit it by hand.
   - `items`: id -> `name`, `section` (store section), `aliases` (other ways people and flyers write it),
     optional `parent` (a more general item: `onions-yellow` -> `onion`), `also` (older ids for the
-    same thing, so earlier data still links up), and `deals` (Grocery Deals' `staple`/`benchmark`).
+    same thing, so earlier data still links up), `deals` (Grocery Deals' `staple`/`benchmark`), and `popularity`
+    (`everyday` or `specialty`; missing means common), which Grocery Deals uses to rank deals people buy most first.
   - `sections`: store sections, in shopping order.
 - Swift (`import KitchenCatalog`): `Catalog.shared.match("Onion - Green")` -> `green-onion`, strong.
 - JavaScript (`js/catalog.mjs`): `match(load(), text)`, the same rules, for the Friday run and the site.
@@ -26,6 +27,9 @@ same thing: `chicken-leg-quarters`.
 - `node js/coverage.mjs <weeks dir>` reports how much of a set of deal rows the catalog recognizes.
 
 ## Using it in the Grocery Deals Friday run
+
+The Friday run happens in the cloud with only the Deals repo, so Deals keeps a copy in
+`vendor/kitchen-catalog/`. After editing the catalog, run `npm run sync-catalog` in the Deals repo.
 
 1. In `draft-week.mjs`, after reading each flyer line: `const m = match(catalog, item)`. If `m.strength === "strong"`,
    set `item_key = m.id` (or keep the existing key when `m.item.also` includes it). Put weak and missing

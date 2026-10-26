@@ -11,7 +11,13 @@ public struct Catalog: Sendable {
         public let parent: String?
         /// Older ids for the same thing, so earlier data still links up.
         public let also: [String]?
+        /// How many people buy it. Missing means common.
+        public let popularity: Popularity?
     }
+
+    /// Everyday: most households buy it most weeks (eggs, rice, chicken thighs, onions).
+    /// Specialty: a smaller group buys it (beef tendon, geoduck). Grocery Deals ranks by it.
+    public enum Popularity: String, Sendable, Decodable { case everyday, common, specialty }
 
     public struct Section: Sendable, Decodable, Identifiable {
         public let id: String
