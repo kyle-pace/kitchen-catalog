@@ -9,6 +9,9 @@ same thing: `chicken-leg-quarters`.
     optional `parent` (a more general item: `onions-yellow` -> `onion`), `also` (older ids for the
     same thing, so earlier data still links up), `deals` (Grocery Deals' `staple`/`benchmark`), and `popularity`
     (`everyday` or `specialty`; missing means common), which Grocery Deals uses to rank deals people buy most first.
+  - `product`: `true` for packaged and prepared types people buy ready-made (chips, soda, frozen pizza, deli meals)
+    rather than cook with. Missing means an ingredient. On Hand can leave products out of recipe matching and the
+    starter pantry; Grocery Deals still gets an id for every flyer line.
   - `sections`: store sections, in shopping order.
 - Swift (`import KitchenCatalog`): `Catalog.shared.match("Onion - Green")` -> `green-onion`, strong.
 - JavaScript (`js/catalog.mjs`): `match(load(), text)`, the same rules, for the Friday run and the site.
@@ -30,6 +33,11 @@ same thing: `chicken-leg-quarters`.
   strong matches only and send weak ones for review.
 - The Swift and JS matchers must agree: `swift test` and `node js/test.mjs` run the same cases.
 - `node js/coverage.mjs <weeks dir>` reports how much of a set of deal rows the catalog recognizes.
+- `node js/score.mjs` scores the catalog against a hand-labeled answer key (`Tests/answer-keys/`): right,
+  close (a parent or child of the right item), wrong, weak and missing. Run it after any catalog or matcher
+  change; the number to keep near zero is **strong and wrong**, since those get filled in without review.
+- Generic items (`chicken`, `rice`, `noodles`, `sausage`, `chips`, `soda`...) exist mainly as parents, so specific
+  items roll up and a vague flyer line ("QH Pork Sausage") still lands somewhere sensible.
 
 ## Using it in the Grocery Deals Friday run
 
@@ -45,3 +53,9 @@ The Friday run happens in the cloud with only the Deals repo, so Deals keeps a c
 
 First run, the last three weeks (1,016 deal rows): 332 strong matches (Deals' own keys covered 300),
 and the catalog agreed with 274 of those 300.
+
+Expansion, 2026-10-25: 215 items added (mostly packaged and prepared types, plus produce, meat and seafood the
+Seattle flyers carry), aliases moved to the more specific item, some parents and store sections fixed.
+On the week of 2026-10-23 (860 lines, `js/score.mjs`): strong and right went from 152 to 622, strong and wrong
+from 49 to 13, no match from 498 to 5. With more specific ids, Deals should look up `staple` and `benchmark` by
+walking up `parent` when an item has none of its own.

@@ -13,6 +13,15 @@ struct MatchTests {
         ("Atlantic salmon fillet", "salmon-atlantic", .strong),
         ("scallions", "green-onion", .strong),
         ("gochujang", "gochujang", .strong),
+        // What a product is, not what's in it: shrimp chips are chips, egg bread is bread.
+        ("Calbee Shrimp Chips", "chips", .strong),
+        ("Tincarbell Egg Bread", "bread", .strong),
+        ("Fami Original Soy Milk", "soy-milk", .strong),
+        ("Chaokoh Coco Milk", "coconut-milk", .strong),
+        // Specific beats general.
+        ("Cherry Blossom Pork Back Rib (Fresh)", "pork-baby-back-ribs", .strong),
+        ("Black Cod Fillet", "sablefish", .strong),
+        ("Kokusai Calrose Rice", "rice-medium-grain", .strong),
     ])
     func strong(_ text: String, _ id: String, _ strength: Catalog.Strength) {
         let m = c.match(text)
@@ -20,7 +29,7 @@ struct MatchTests {
         #expect(m?.strength == strength)
     }
 
-    @Test(arguments: ["Calbee Shrimp Chips", "Tincarbell Egg Bread", "Fami Original Soy Milk"])
+    @Test(arguments: ["Oreo Savory Chicken Flavor/ Vintage Popcorn Flavor"])
     func notStrong(_ text: String) {
         #expect(c.match(text)?.strength != .strong)
     }

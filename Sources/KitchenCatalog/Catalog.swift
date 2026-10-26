@@ -13,6 +13,10 @@ public struct Catalog: Sendable {
         public let also: [String]?
         /// How many people buy it. Missing means common.
         public let popularity: Popularity?
+        /// True for packaged and prepared types people buy ready-made (chips, soda, frozen pizza)
+        /// rather than cook with. Missing means an ingredient. (Not the same as `Kinds`, which groups
+        /// items by family: "White Miso" -> miso.)
+        public let product: Bool?
     }
 
     /// Everyday: most households buy it most weeks (eggs, rice, chicken thighs, onions).
