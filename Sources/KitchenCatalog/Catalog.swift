@@ -108,7 +108,7 @@ public struct Catalog: Sendable {
         return w.hasSuffix("s") ? String(w.dropLast()) : w
     }
 
-    private static let qualifier = try! NSRegularExpression(pattern: #"^(?:organic|fresh|frozen|large|small|medium|jumbo|extra|select|premium|natural|local|whole|boneless|skinless|bone|skin|in|on|sliced|diced|chopped|bag|pack|package|tray|bunch|ea|each|ct|count|pc|pcs|lb|lbs|oz|fl|kg|g|ml|l|gal|dozen|doz|value|family|club|bulk|assorted|headless|cut|fillet|filet|steak|portion|piece|chunk|point|flat|roll|wing|midjoint|tip|loin|chop|shank|half|jarred|canned|bottle|jar|can|\d+(?:\.\d+)?)$"#)
+    private static let qualifier = try! NSRegularExpression(pattern: #"^(?:organic|fresh|frozen|large|small|medium|jumbo|extra|select|premium|natural|local|whole|boneless|skinless|bone|skin|in|on|sliced|diced|chopped|bag|pack|package|tray|bunch|ea|each|ct|count|pc|pcs|lb|lbs|oz|fl|kg|g|ml|l|gal|dozen|doz|value|family|club|bulk|assorted|headless|cut|fillet|filet|steak|portion|piece|chunk|point|flat|roll|wing|midjoint|tip|loin|chop|shank|half|jarred|canned|bottle|jar|can|selected|variety|variant|series|size|pk|multi|single|qt|inch|of|to|the|shell|square|fz|live|box|case|regular|light|original|mini|\d+(?:\.\d+)?(?:g|kg|ml|oz|lb|ct|pk)?)$"#)
     private static let changesIt: Set<String> = ["soy", "oat", "almond", "coconut", "rice", "plant", "based", "cashew", "chocolate", "strawberry", "banana", "condensed", "evaporated", "powdered", "flavored", "shrimp", "fish"]
 
     private static func isQualifier(_ w: String) -> Bool {
@@ -118,10 +118,16 @@ public struct Catalog: Sendable {
     /// The catalog item a piece of text names, or nil. Only fill things in automatically from
     /// strong matches; weak ones are worth asking about.
     public func match(_ text: String) -> Match? {
-        let a = read(text)
-        let b = Self.reorder(text).flatMap(read)
+        // "Braised croaker with rice cake", "Goat meat w/skin on": the product is what comes before "with".
+        let main = text.range(of: #"\s+(?:with\b|w/)\s*"#, options: [.regularExpression, .caseInsensitive])
+            .map { String(text[..<$0.lowerBound]) }
+            .flatMap { $0.isEmpty ? nil : $0 } ?? text
+        let a = read(main)
+        let b = Self.reorder(main).flatMap(read)
+        // "Popcorn, Butter Lovers or Movie Theater Butter": when the part before the comma names the
+        // product outright, it wins over a flavor or variant after the comma.
         let pick: (Match, Int)? = switch (a, b) {
-        case let (a?, b?): b.1 > a.1 ? b : a
+        case let (a?, b?): (b.0.strength == .strong && a.0.strength == .strong) || b.1 >= a.1 ? b : a
         case let (a?, nil): a
         case let (nil, b?): b
         default: nil
@@ -142,12 +148,15 @@ public struct Catalog: Sendable {
         guard !words.isEmpty else { return nil }
         var end = words.count
         while end > 1, Self.isQualifier(words[end - 1]) { end -= 1 }
-        let head = " " + words[..<end].joined(separator: " ") + " "
         let all = " " + words.joined(separator: " ") + " "
         var best: (Match, Int)?
         for t in terms {
             guard let at = all.range(of: " \(t.term) ") else { continue }
-            let atHead = head.hasSuffix(" \(t.term) ") || all.hasSuffix(" \(t.term) ")
+            // At the head: the term ends where the product name ends, give or take trailing qualifiers.
+            // A term may run into the qualifiers ("beef shank boneless": "shank" is also a cut word),
+            // as long as it starts inside the product name ("salmon steak" is still salmon, not steak).
+            let startWord = all[..<at.lowerBound].split(separator: " ").count
+            let atHead = (startWord < end && startWord + t.words >= end) || all.hasSuffix(" \(t.term) ")
             let before = all[..<at.lowerBound].split(separator: " ").last.map(String.init) ?? ""
             let changed = t.words == 1 && Self.changesIt.contains(before)
             let termWords = Set(t.term.split(separator: " ").map(String.init))

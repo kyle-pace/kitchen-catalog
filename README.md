@@ -57,5 +57,7 @@ and the catalog agreed with 274 of those 300.
 Expansion, 2026-10-25: 215 items added (mostly packaged and prepared types, plus produce, meat and seafood the
 Seattle flyers carry), aliases moved to the more specific item, some parents and store sections fixed.
 On the week of 2026-10-23 (860 lines, `js/score.mjs`): strong and right went from 152 to 622, strong and wrong
-from 49 to 13, no match from 498 to 5. With more specific ids, Deals should look up `staple` and `benchmark` by
+from 49 to 13, no match from 498 to 5. The matcher changes that followed (more size and
+"Selected Varieties" words skipped, the part before "with" or a comma is the product) took strong and right
+to 690 and strong and wrong to 9. With more specific ids, Deals should look up `staple` and `benchmark` by
 walking up `parent` when an item has none of its own.

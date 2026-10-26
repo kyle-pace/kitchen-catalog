@@ -18,6 +18,12 @@ struct MatchTests {
         ("Tincarbell Egg Bread", "bread", .strong),
         ("Fami Original Soy Milk", "soy-milk", .strong),
         ("Chaokoh Coco Milk", "coconut-milk", .strong),
+        // A name that runs into cut words; sizes and "Selected Varieties" after the name.
+        ("Beef Shank Boneless", "beef-shank", .strong),
+        ("General Mills Cereal, Selected Varieties, 8.9 to 12 oz", "cereal", .strong),
+        // The part before the comma, or before "with", is the product.
+        ("Act II Popcorn, Butter Lovers or Movie Theater Butter", "popcorn", .strong),
+        ("Goat Meat w/Skin on", "goat", .strong),
         // Specific beats general.
         ("Cherry Blossom Pork Back Rib (Fresh)", "pork-baby-back-ribs", .strong),
         ("Black Cod Fillet", "sablefish", .strong),
