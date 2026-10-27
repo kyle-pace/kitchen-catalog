@@ -42,6 +42,9 @@ public struct Catalog: Sendable {
     public let sections: [Section]
     public let items: [String: Item]
     private let terms: [Term]
+    /// One-word names and aliases (for "Chicken & Pork"), and every word in each item's names (for cooking words).
+    private let single: Set<String>
+    private let ownWords: [String: Set<String>]
 
     private struct Term: Sendable {
         let id: String
@@ -82,6 +85,10 @@ public struct Catalog: Sendable {
         }
         // Longest first; on a tie, an item's own name beats someone else's alias.
         self.terms = terms.sorted { ($0.words, $0.term.count, $0.isName ? 1 : 0, $1.id) > ($1.words, $1.term.count, $1.isName ? 1 : 0, $0.id) }
+        self.single = Set(terms.filter { $0.words == 1 }.map(\.term))
+        var own: [String: Set<String>] = [:]
+        for t in terms { own[t.id, default: []].formUnion(t.term.split(separator: " ").map(String.init)) }
+        self.ownWords = own
     }
 
     public func section(_ id: String) -> Section? { sections.first { $0.id == id } }
@@ -110,6 +117,10 @@ public struct Catalog: Sendable {
 
     private static let qualifier = try! NSRegularExpression(pattern: #"^(?:organic|fresh|frozen|large|small|medium|jumbo|extra|select|premium|natural|local|whole|boneless|skinless|bone|skin|in|on|sliced|diced|chopped|bag|pack|package|tray|bunch|ea|each|ct|count|pc|pcs|lb|lbs|oz|fl|kg|g|ml|l|gal|dozen|doz|value|family|club|bulk|assorted|headless|cut|fillet|filet|steak|portion|piece|chunk|point|flat|roll|wing|midjoint|tip|loin|chop|shank|half|jarred|canned|bottle|jar|can|selected|variety|variant|series|size|pk|multi|single|qt|inch|of|to|the|shell|square|fz|live|box|case|regular|light|original|mini|roast|firm|soft|up|and|s|h|o|p|d|head|tail|off|peeled|deveined|raw|cooked|\d+(?:\.\d+)?(?:g|kg|ml|oz|lb|ct|pk)?)$"#)
     private static let changesIt: Set<String> = ["soy", "oat", "almond", "coconut", "rice", "plant", "based", "cashew", "chocolate", "strawberry", "banana", "condensed", "evaporated", "powdered", "flavored", "shrimp", "fish"]
+    // A cooking word before an ingredient makes the line a dish, not the grocery: "Braised Yellow Croaker with Rice Cake",
+    // "Stewed Pork Trotters", "Spiced Butternut Squash". Such matches are weak (sent to review). Ready-made products
+    // ("Glazed Donuts", "Fried Leek Pie") and items with the word in one of their names ("fried dace") are unaffected.
+    private static let dish: Set<String> = ["braised", "stewed", "spiced", "marinated", "steamed", "grilled", "sauteed", "glazed", "fried", "roasted", "rotisserie"]
 
     private static func isQualifier(_ w: String) -> Bool {
         qualifier.firstMatch(in: w, range: NSRange(w.startIndex..., in: w)) != nil
@@ -128,7 +139,9 @@ public struct Catalog: Sendable {
         let beforeFor = beforeWith.range(of: #"\s+for\b\s*"#, options: [.regularExpression, .caseInsensitive])
             .map { String(beforeWith[..<$0.lowerBound]) }
             .flatMap { $0.isEmpty ? nil : $0 }
-        let main = beforeFor.flatMap { read($0) != nil ? $0 : nil } ?? beforeWith
+        // ...unless a name or alias that itself says "for" is what the whole line is ("pork for stew", "beef for stew").
+        let saysFor = read(beforeWith).map { $0.0.strength == .strong && $0.0.term.split(separator: " ").contains("for") } ?? false
+        let main = saysFor ? beforeWith : (beforeFor.flatMap { read($0) != nil ? $0 : nil } ?? beforeWith)
         let a = read(main)
         let b = Self.reorder(main).flatMap(read)
         // "Popcorn, Butter Lovers or Movie Theater Butter": when the part before the comma names the
@@ -163,6 +176,7 @@ public struct Catalog: Sendable {
         while end > 1, Self.isQualifier(words[end - 1]) { end -= 1 }
         let all = " " + words.joined(separator: " ") + " "
         var best: (Match, Int)?
+        var bestStart = 0
         var strongIds: Set<String> = []
         for t in terms {
             guard let at = all.range(of: " \(t.term) ") else { continue }
@@ -182,6 +196,7 @@ public struct Catalog: Sendable {
             if strong { strongIds.insert(t.id) }
             if best == nil || score > best!.1, let item = items[t.id] {
                 best = (Match(id: t.id, item: item, term: t.term, strength: strong ? .strong : .weak), score)
+                bestStart = startWord
             }
         }
         // A longer alias found mid-name ("cosmic crisp" in "Cosmic Crisp Apples") is still a strong match
@@ -189,6 +204,14 @@ public struct Catalog: Sendable {
         if let found = best, found.0.strength == .weak, strongIds.contains(found.0.id) {
             let m = found.0
             best = (Match(id: m.id, item: m.item, term: m.term, strength: .strong), found.1)
+        }
+        if let found = best, found.0.strength == .strong {
+            let m = found.0
+            let own = ownWords[m.id] ?? []
+            let cooked = m.item.product != true && words[..<bestStart].contains { Self.dish.contains($0) && !own.contains($0) }
+            // "Hotdogs Chicken & Pork": a grocery, "and", then the item names what the product is made of. Weak.
+            let madeOf = bestStart >= 2 && words[bestStart - 1] == "and" && single.contains(words[bestStart - 2])
+            if cooked || madeOf { best = (Match(id: m.id, item: m.item, term: m.term, strength: .weak), found.1) }
         }
         return best
     }
