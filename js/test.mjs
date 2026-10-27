@@ -15,7 +15,7 @@ const strong = [["Chicken leg quarters, 10 lb", "chicken-leg-quarters"], ["Onion
   // Found in the Oct 23 re-run: roasts, "for soup", more than one comma.
   ["Pork Loin Roast", "pork-loin"], ["Cosmic Crisp Apples", "apples"], ["Beef Short Rib For Soup", "beef-short-ribs"], ["Pork For Stew", "pork-stew-meat"], ["Pork shoulder (butt), boneless", "pork-shoulder"], ["Natures Soy Tofu", "tofu"], ["Cabbage Green", "green-cabbage"], ["Boneless Beef Top Sirloin Steaks, Premium Beef, Value Pack", "beef-sirloin"], ["White Shrimp H/O 20-30 - 4 lbs", "shrimp"],
   // Other names (2026-10-27): regional and market names, and broad words for the search box.
-  ["Coriander", "fresh-herbs"], ["Pak Choi", "bok-choy"], ["Rocket", "arugula"], ["Capsicum", "bell-peppers"], ["Gai Choy", "mustard-greens"],
+  ["Coriander Leaves", "fresh-herbs"], ["Pak Choi", "bok-choy"], ["Rocket", "arugula"], ["Capsicum", "bell-peppers"], ["Gai Choy", "mustard-greens"],
   ["Korean Chili Powder", "gochugaru"], ["Chili Powder", "chili-powder"], ["Bean Sprouts", "bean-sprouts"], ["Lap Cheong", "sausage"],
   ["Bangus", "milkfish"], ["Pork", "pork"], ["Whole Fish", "fish"], ["Beef For Stew", "beef-stew"], ["Passion Fruit Juice", "juice"],
   ["Katsu Shredded Cabbage", "green-cabbage"]];
@@ -25,7 +25,9 @@ for (const [text, id] of strong) {
 }
 // A dish or a mix, not the grocery: cooking words before an ingredient, and "X & Y" where Y is what it's made of.
 for (const text of ["Oreo Savory Chicken Flavor/ Vintage Popcorn Flavor", "Braised Yellow Croaker with Rice Cake", "Stewed Pork Trotters",
-  "Metropolitan Market Spiced Butternut Squash", "MP Hotdogs Chicken & Pork Jumbo"]) {
+  "Metropolitan Market Spiced Butternut Squash", "MP Hotdogs Chicken & Pork Jumbo", "BBQ Pork", "Pickled Cabbage",
+  // A flavor after a ready-made product: the product, sent to review.
+  "Pepsi Wild Cherry", "Hi-Chew Mango"]) {
   const m = match(c, text);
   if (m?.strength === "strong") { failed++; console.log("FAIL", text, "should not be strong ->", m.id); }
 }

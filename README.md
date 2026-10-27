@@ -35,9 +35,12 @@ same thing: `chicken-leg-quarters`.
   **strong** when the item is what the product is (its last noun, give or take sizes, cuts and words
   like "organic"), and **weak** when it's only mentioned ("Shrimp Chips"). Automated jobs fill in
   strong matches only and send weak ones for review. Two things make a match weak even at the head of the name:
-  a cooking word before an ingredient ("Braised Yellow Croaker", "Stewed Pork Trotters": a dish, not the grocery;
-  ready-made products like "Glazed Donuts" keep theirs), and "X & Y" where X is also a grocery ("Hotdogs Chicken &
-  Pork": what it's made of). A name or alias that says "for" wins over the part before "for" ("Pork For Stew").
+  a cooking or curing word before an ingredient ("Braised Yellow Croaker", "Stewed Pork Trotters", "Pickled Cabbage":
+  a dish or a preserved food, not the grocery; ready-made products like "Glazed Donuts" keep theirs, and so do items
+  with the word in a name of theirs or a parent's), and "X & Y" where X is also a grocery ("Hotdogs Chicken & Pork":
+  what it's made of). And when a ready-made product is named before the head ("Pepsi Wild Cherry", "Hi-Chew Mango"),
+  the line is that product with a flavor, sent to review. A name or alias that says "for" wins over the part before
+  "for" ("Pork For Stew").
 - The Swift and JS matchers must agree: `swift test` and `node js/test.mjs` run the same cases.
 - `node js/coverage.mjs <weeks dir>` reports how much of a set of deal rows the catalog recognizes.
 - `node js/score.mjs` scores the catalog against a hand-labeled answer key (`Tests/answer-keys/`): right,

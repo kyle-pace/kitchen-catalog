@@ -39,7 +39,7 @@ struct MatchTests {
         ("Boneless Beef Top Sirloin Steaks, Premium Beef, Value Pack", "beef-sirloin", .strong),
         ("White Shrimp H/O 20-30 - 4 lbs", "shrimp", .strong),
         // Other names (2026-10-27): regional and market names, and broad words for the search box.
-        ("Coriander", "fresh-herbs", .strong),
+        ("Coriander Leaves", "fresh-herbs", .strong),
         ("Pak Choi", "bok-choy", .strong),
         ("Rocket", "arugula", .strong),
         ("Capsicum", "bell-peppers", .strong),
@@ -66,7 +66,9 @@ struct MatchTests {
 
     /// A dish or a mix, not the grocery: cooking words before an ingredient, and "X & Y" where Y is what it's made of.
     @Test(arguments: ["Oreo Savory Chicken Flavor/ Vintage Popcorn Flavor", "Braised Yellow Croaker with Rice Cake", "Stewed Pork Trotters",
-                      "Metropolitan Market Spiced Butternut Squash", "MP Hotdogs Chicken & Pork Jumbo"])
+                      "Metropolitan Market Spiced Butternut Squash", "MP Hotdogs Chicken & Pork Jumbo", "BBQ Pork", "Pickled Cabbage",
+                      // A flavor after a ready-made product: the product, sent to review.
+                      "Pepsi Wild Cherry", "Hi-Chew Mango"])
     func notStrong(_ text: String) {
         #expect(c.match(text)?.strength != .strong)
     }
