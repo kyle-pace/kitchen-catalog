@@ -1,0 +1,991 @@
+{
+ "about": "Other names for groceries: 220 lines written 2026-10-27 by a separate agent that saw only item ids and names, not aliases, then labeled by that agent. expect null means nothing in the catalog fits. Scored blind once (right 74 before the 2026-10-27 synonyms, 111 after); its misses then became a second round of aliases, so it is no longer held out. Use it as a regression check: node js/score.mjs Tests/answer-keys/other-names-2026-10-27.json",
+ "lines": [
+  {
+   "item": "Gai Lan - 2 lb",
+   "expect": "chinese-broccoli"
+  },
+  {
+   "item": "Aubergine, each",
+   "expect": "eggplant"
+  },
+  {
+   "item": "Courgettes 500g",
+   "expect": "zucchini",
+   "accept": [
+    "summer-squash"
+   ]
+  },
+  {
+   "item": "coriander bunch",
+   "expect": "fresh-herbs"
+  },
+  {
+   "item": "Spring Onions",
+   "expect": "green-onion"
+  },
+  {
+   "item": "Wild Rocket 150g bag",
+   "expect": "arugula",
+   "accept": [
+    "salad-greens"
+   ]
+  },
+  {
+   "item": "Red Capsicum",
+   "expect": "bell-peppers"
+  },
+  {
+   "item": "ONG CHOY",
+   "expect": "water-spinach"
+  },
+  {
+   "item": "Choy Sum - lb",
+   "expect": "yu-choy"
+  },
+  {
+   "item": "Pak Choi",
+   "expect": "bok-choy"
+  },
+  {
+   "item": "Ampalaya",
+   "expect": "bitter-melon"
+  },
+  {
+   "item": "Opo Squash",
+   "expect": "squash",
+   "accept": [
+    "summer-squash"
+   ]
+  },
+  {
+   "item": "Sitaw (String Beans) bundle",
+   "expect": "long-beans"
+  },
+  {
+   "item": "Butternut Squash ea",
+   "expect": "squash-winter",
+   "accept": [
+    "squash"
+   ]
+  },
+  {
+   "item": "Renkon",
+   "expect": "lotus-root"
+  },
+  {
+   "item": "Dau Mieu (Pea Leaves)",
+   "expect": "pea-shoots"
+  },
+  {
+   "item": "Bai Toey",
+   "expect": "pandan-leaves"
+  },
+  {
+   "item": "Lemon Grass stalks",
+   "expect": "lemongrass"
+  },
+  {
+   "item": "Bird's Eye Chillies",
+   "expect": "thai-chilies"
+  },
+  {
+   "item": "Fresh Pasilla Peppers lb",
+   "expect": "poblano-peppers"
+  },
+  {
+   "item": "Elote 5/$2",
+   "expect": "corn"
+  },
+  {
+   "item": "Mangetout",
+   "expect": "snow-peas"
+  },
+  {
+   "item": "Beetroot",
+   "expect": "beets"
+  },
+  {
+   "item": "Swede",
+   "expect": "rutabaga"
+  },
+  {
+   "item": "Singkamas",
+   "expect": "jicama"
+  },
+  {
+   "item": "Kumara",
+   "expect": "sweet-potatoes"
+  },
+  {
+   "item": "Camote Tops",
+   "expect": "sweet-potato-leaves"
+  },
+  {
+   "item": "Cavolo Nero",
+   "expect": "lacinato-kale",
+   "accept": [
+    "kale"
+   ]
+  },
+  {
+   "item": "Cos Lettuce",
+   "expect": "lettuce-romaine",
+   "accept": [
+    "lettuce"
+   ]
+  },
+  {
+   "item": "Kinchay",
+   "expect": "leaf-celery"
+  },
+  {
+   "item": "Eschalots",
+   "expect": "shallot"
+  },
+  {
+   "item": "Bawang (Garlic)",
+   "expect": "garlic"
+  },
+  {
+   "item": "Adrak",
+   "expect": "ginger"
+  },
+  {
+   "item": "Golden Needle Mushroom 200g",
+   "expect": "enoki"
+  },
+  {
+   "item": "Moyashi",
+   "expect": "bean-sprouts"
+  },
+  {
+   "item": "Tomatillos",
+   "expect": null
+  },
+  {
+   "item": "Hass Avos 4 ct",
+   "expect": "avocados"
+  },
+  {
+   "item": "brussel sprouts",
+   "expect": "brussels-sprouts"
+  },
+  {
+   "item": "Brocolli Crowns",
+   "expect": "broccoli"
+  },
+  {
+   "item": "Haricots Verts",
+   "expect": "green-beans"
+  },
+  {
+   "item": "Yukon Gold Potatoes 5 lb",
+   "expect": "potatoes-red-yellow"
+  },
+  {
+   "item": "Rau Ram",
+   "expect": "fresh-herbs"
+  },
+  {
+   "item": "Tia To",
+   "expect": "perilla-leaves"
+  },
+  {
+   "item": "Platanos Machos",
+   "expect": "plantains"
+  },
+  {
+   "item": "Hachiya Kaki",
+   "expect": "persimmons"
+  },
+  {
+   "item": "Satsumas",
+   "expect": "mandarins"
+  },
+  {
+   "item": "Calamansi",
+   "expect": "lemons-and-limes",
+   "accept": [
+    "limes"
+   ]
+  },
+  {
+   "item": "Limon Persa",
+   "expect": "limes",
+   "accept": [
+    "lemons-and-limes"
+   ]
+  },
+  {
+   "item": "Litchi",
+   "expect": "lychee"
+  },
+  {
+   "item": "strawbs",
+   "expect": "strawberries"
+  },
+  {
+   "item": "Fresh Pork Butt Sliced",
+   "expect": "pork-shoulder"
+  },
+  {
+   "item": "Kasim (Pork Shoulder)",
+   "expect": "pork-shoulder"
+  },
+  {
+   "item": "Liempo",
+   "expect": "pork-belly"
+  },
+  {
+   "item": "Pork Trotters",
+   "expect": "pork-feet"
+  },
+  {
+   "item": "St. Louis Style Spareribs",
+   "expect": "pork-spareribs"
+  },
+  {
+   "item": "Pork Fillet",
+   "expect": "pork-tenderloin"
+  },
+  {
+   "item": "Shabu Shabu Pork Loin",
+   "expect": "pork-loin-sliced",
+   "accept": [
+    "pork-loin"
+   ]
+  },
+  {
+   "item": "Pork Mince 500g",
+   "expect": "ground-pork"
+  },
+  {
+   "item": "Beef Mince",
+   "expect": "beef-ground"
+  },
+  {
+   "item": "LA Galbi",
+   "expect": "beef-short-ribs"
+  },
+  {
+   "item": "Chuck Roast",
+   "expect": "beef-chuck"
+  },
+  {
+   "item": "Carne para Guisar",
+   "expect": "beef-stew"
+  },
+  {
+   "item": "Mondongo",
+   "expect": "beef-tripe"
+  },
+  {
+   "item": "Book Tripe",
+   "expect": "beef-omasum"
+  },
+  {
+   "item": "Rabo de Res",
+   "expect": "oxtail"
+  },
+  {
+   "item": "Eye of Round",
+   "expect": "beef-round"
+  },
+  {
+   "item": "Rump Steak",
+   "expect": "beef-sirloin",
+   "accept": [
+    "beef-steak"
+   ]
+  },
+  {
+   "item": "Scotch Fillet",
+   "expect": "beef-steak"
+  },
+  {
+   "item": "Chicken Fillets",
+   "expect": "chicken-breast-boneless"
+  },
+  {
+   "item": "Chicken Thigh Fillets",
+   "expect": "chicken-thighs"
+  },
+  {
+   "item": "Chicken Drums",
+   "expect": "chicken-drumsticks"
+  },
+  {
+   "item": "Party Wings Family Pack",
+   "expect": "chicken-wings"
+  },
+  {
+   "item": "Stewing Hen",
+   "expect": "chicken-stewing"
+  },
+  {
+   "item": "Mollejas de Pollo",
+   "expect": "chicken-gizzards"
+  },
+  {
+   "item": "Mutton Curry Cut (Goat)",
+   "expect": "goat",
+   "accept": [
+    "lamb"
+   ]
+  },
+  {
+   "item": "Longganisa",
+   "expect": "sausage"
+  },
+  {
+   "item": "Lap Cheong",
+   "expect": "sausage"
+  },
+  {
+   "item": "Frankfurters",
+   "expect": "hot-dogs"
+  },
+  {
+   "item": "Tiger Prawns",
+   "expect": "shrimp"
+  },
+  {
+   "item": "Hipon",
+   "expect": "shrimp"
+  },
+  {
+   "item": "Alimango (Mud Crab)",
+   "expect": "crab"
+  },
+  {
+   "item": "Halaan",
+   "expect": "clams"
+  },
+  {
+   "item": "Tahong",
+   "expect": "mussels"
+  },
+  {
+   "item": "Mirugai",
+   "expect": "geoduck"
+  },
+  {
+   "item": "gooey duck",
+   "expect": "geoduck"
+  },
+  {
+   "item": "Hotate",
+   "expect": "scallops"
+  },
+  {
+   "item": "Pusit",
+   "expect": "squid"
+  },
+  {
+   "item": "Cuttle Fish",
+   "expect": "cuttlefish"
+  },
+  {
+   "item": "Crayfish",
+   "expect": "crawfish"
+  },
+  {
+   "item": "Bangus",
+   "expect": "milkfish"
+  },
+  {
+   "item": "GG (Galunggong)",
+   "expect": "galunggong",
+   "accept": [
+    "scad"
+   ]
+  },
+  {
+   "item": "Hairtail",
+   "expect": "beltfish"
+  },
+  {
+   "item": "Talakitok",
+   "expect": "jackfish"
+  },
+  {
+   "item": "Basa Fillets",
+   "expect": "swai"
+  },
+  {
+   "item": "Gindara",
+   "expect": "sablefish"
+  },
+  {
+   "item": "Pacific Snapper Fillets",
+   "expect": "rockfish",
+   "accept": [
+    "snapper"
+   ]
+  },
+  {
+   "item": "Branzino",
+   "expect": "sea-bass"
+  },
+  {
+   "item": "Lapu-Lapu (Grouper)",
+   "expect": "fish"
+  },
+  {
+   "item": "Bacalao",
+   "expect": "cod"
+  },
+  {
+   "item": "Steelhead",
+   "expect": "trout",
+   "accept": [
+    "salmon-other"
+   ]
+  },
+  {
+   "item": "Copper River Sockeye",
+   "expect": "salmon-sockeye",
+   "accept": [
+    "salmon"
+   ]
+  },
+  {
+   "item": "Nova Lox 4 oz",
+   "expect": "smoked-salmon"
+  },
+  {
+   "item": "Hamachi",
+   "expect": "yellowtail"
+  },
+  {
+   "item": "Unagi Kabayaki",
+   "expect": "unagi"
+  },
+  {
+   "item": "Full Cream Milk 2L",
+   "expect": "milk"
+  },
+  {
+   "item": "Leche Entera",
+   "expect": "milk"
+  },
+  {
+   "item": "Thickened Cream",
+   "expect": "heavy-whipping-cream"
+  },
+  {
+   "item": "Double Cream",
+   "expect": "heavy-whipping-cream"
+  },
+  {
+   "item": "Crema Mexicana",
+   "expect": "sour-cream",
+   "accept": [
+    "creme-fra-che"
+   ]
+  },
+  {
+   "item": "Queso Fresco",
+   "expect": "cheese-other",
+   "accept": [
+    "cheese"
+   ]
+  },
+  {
+   "item": "Tasty Cheese 500g",
+   "expect": "cheese-cheddar",
+   "accept": [
+    "cheese"
+   ]
+  },
+  {
+   "item": "Parmigiano Reggiano",
+   "expect": "parmesan"
+  },
+  {
+   "item": "Philly Cream Cheese",
+   "expect": "cream-cheese"
+  },
+  {
+   "item": "Dahi",
+   "expect": "yogurt"
+  },
+  {
+   "item": "Greek Yoghurt",
+   "expect": "yogurt"
+  },
+  {
+   "item": "Oatly Barista",
+   "expect": "oat-milk"
+  },
+  {
+   "item": "Kerrygold",
+   "expect": "butter"
+  },
+  {
+   "item": "Huevos 18 ct",
+   "expect": "eggs"
+  },
+  {
+   "item": "Plain Flour 1kg",
+   "expect": "all-purpose-flour"
+  },
+  {
+   "item": "Atta 20 lb",
+   "expect": "wheat-flour"
+  },
+  {
+   "item": "Besan (Gram Flour)",
+   "expect": null
+  },
+  {
+   "item": "Cornflour",
+   "expect": "cornstarch"
+  },
+  {
+   "item": "Tapioca Starch",
+   "expect": null
+  },
+  {
+   "item": "Katakuriko",
+   "expect": "potato-starch"
+  },
+  {
+   "item": "Bicarb Soda",
+   "expect": "baking-soda"
+  },
+  {
+   "item": "Icing Sugar",
+   "expect": "powdered-sugar"
+  },
+  {
+   "item": "Caster Sugar",
+   "expect": "white-sugar"
+  },
+  {
+   "item": "Malagkit",
+   "expect": "glutinous-rice"
+  },
+  {
+   "item": "Botan Calrose",
+   "expect": "rice-medium-grain"
+  },
+  {
+   "item": "Genmai",
+   "expect": "brown-rice"
+  },
+  {
+   "item": "Bihon",
+   "expect": "rice-vermicelli",
+   "accept": [
+    "rice-noodles"
+   ]
+  },
+  {
+   "item": "Sanuki Udon (frozen)",
+   "expect": "udon"
+  },
+  {
+   "item": "Banh Trang",
+   "expect": "rice-paper"
+  },
+  {
+   "item": "Garbanzo Beans, canned 15 oz",
+   "expect": "canned-chickpeas"
+  },
+  {
+   "item": "Masoor Dal",
+   "expect": "lentils"
+  },
+  {
+   "item": "Heinz Beanz",
+   "expect": "baked-beans"
+  },
+  {
+   "item": "Pinto Beans, dry 4 lb",
+   "expect": null
+  },
+  {
+   "item": "Kidney Beans, canned",
+   "expect": "cooked-beans"
+  },
+  {
+   "item": "Tinned Tomatoes",
+   "expect": "canned-tomatoes"
+  },
+  {
+   "item": "Tomato Puree, 140g tube",
+   "expect": "tomato-paste",
+   "accept": [
+    "canned-tomatoes"
+   ]
+  },
+  {
+   "item": "Rao's Marinara",
+   "expect": "pasta-sauce"
+  },
+  {
+   "item": "Evaporated Milk, Carnation",
+   "expect": null
+  },
+  {
+   "item": "Worcester Sauce",
+   "expect": "worcestershire-sauce"
+  },
+  {
+   "item": "Laoganma",
+   "expect": "chili-crisp"
+  },
+  {
+   "item": "Toyo",
+   "expect": "soy-sauce"
+  },
+  {
+   "item": "Kecap Manis",
+   "expect": "dark-soy-sauce",
+   "accept": [
+    "soy-sauce"
+   ]
+  },
+  {
+   "item": "Patis",
+   "expect": "fish-sauce"
+  },
+  {
+   "item": "Maggi Seasoning",
+   "expect": "liquid-seasoning"
+  },
+  {
+   "item": "Pixian Chili Bean Paste",
+   "expect": "doubanjiang"
+  },
+  {
+   "item": "Shao Hsing Cooking Wine",
+   "expect": "shaoxing-wine",
+   "accept": [
+    "rice-wine"
+   ]
+  },
+  {
+   "item": "Mentsuyu",
+   "expect": "noodle-soup-base"
+  },
+  {
+   "item": "Yaki Nori",
+   "expect": "nori"
+  },
+  {
+   "item": "Vermont Curry",
+   "expect": "curry-roux"
+  },
+  {
+   "item": "Massaman Curry Paste",
+   "expect": null
+  },
+  {
+   "item": "Tahina",
+   "expect": "tahini"
+  },
+  {
+   "item": "Jocheong",
+   "expect": "korean-rice-syrup"
+  },
+  {
+   "item": "Swanson Chicken Broth 32 oz",
+   "expect": "broth"
+  },
+  {
+   "item": "Mustard Oil",
+   "expect": null
+  },
+  {
+   "item": "Haldi Powder",
+   "expect": "turmeric"
+  },
+  {
+   "item": "Jeera",
+   "expect": "cumin"
+  },
+  {
+   "item": "Elaichi",
+   "expect": "cardamom"
+  },
+  {
+   "item": "Hing",
+   "expect": "asafetida"
+  },
+  {
+   "item": "Kasoori Methi",
+   "expect": "kasuri-methi"
+  },
+  {
+   "item": "Deggi Mirch",
+   "expect": "kashmiri-chili-powder",
+   "accept": [
+    "chili-powder"
+   ]
+  },
+  {
+   "item": "Saunf",
+   "expect": "fennel-seed"
+  },
+  {
+   "item": "Dhania Powder",
+   "expect": "coriander-seed"
+  },
+  {
+   "item": "Dahon ng Laurel",
+   "expect": "bay-leaf"
+  },
+  {
+   "item": "Achiote (Annatto Seeds)",
+   "expect": null
+  },
+  {
+   "item": "Hua Jiao",
+   "expect": "sichuan-peppercorn"
+  },
+  {
+   "item": "Bajiao",
+   "expect": "star-anise"
+  },
+  {
+   "item": "Chile de Arbol",
+   "expect": "dried-whole-chilies"
+  },
+  {
+   "item": "Chile Ancho",
+   "expect": "dried-dark-chiles"
+  },
+  {
+   "item": "Nanami Togarashi",
+   "expect": "shichimi-togarashi"
+  },
+  {
+   "item": "Ajinomoto",
+   "expect": "msg"
+  },
+  {
+   "item": "Nescafe Classic",
+   "expect": "instant-coffee"
+  },
+  {
+   "item": "Cafe Bustelo",
+   "expect": "coffee"
+  },
+  {
+   "item": "Genmaicha",
+   "expect": "tea"
+  },
+  {
+   "item": "Topo Chico",
+   "expect": "bottled-water",
+   "accept": [
+    "soda"
+   ]
+  },
+  {
+   "item": "Red Bull 4 pk",
+   "expect": "energy-drinks"
+  },
+  {
+   "item": "Digestive Biscuits",
+   "expect": "cookies"
+  },
+  {
+   "item": "Skyflakes",
+   "expect": "crackers"
+  },
+  {
+   "item": "Walkers Crisps",
+   "expect": "potato-chips",
+   "accept": [
+    "chips"
+   ]
+  },
+  {
+   "item": "Totopos",
+   "expect": "tortilla-chips",
+   "accept": [
+    "chips"
+   ]
+  },
+  {
+   "item": "Pandesal",
+   "expect": "buns"
+  },
+  {
+   "item": "Ensaymada",
+   "expect": "pastries"
+  },
+  {
+   "item": "Doughnuts, glazed 12 ct",
+   "expect": "donuts"
+  },
+  {
+   "item": "Siopao",
+   "expect": "bao"
+  },
+  {
+   "item": "Bibigo Mandu",
+   "expect": "dumplings",
+   "accept": [
+    "potstickers"
+   ]
+  },
+  {
+   "item": "Tang Yuan",
+   "expect": "rice-balls"
+  },
+  {
+   "item": "Daifuku",
+   "expect": "mochi"
+  },
+  {
+   "item": "Onigiri",
+   "expect": "prepared-meals",
+   "accept": [
+    "sushi"
+   ]
+  },
+  {
+   "item": "Lumpiang Shanghai, frozen",
+   "expect": "spring-rolls"
+  },
+  {
+   "item": "Paper Towels 6 rolls",
+   "expect": null
+  },
+  {
+   "item": "Shrimp Flavored Chips",
+   "expect": "chips",
+   "accept": [
+    "snacks"
+   ]
+  },
+  {
+   "item": "Mango Juice",
+   "expect": "juice"
+  },
+  {
+   "item": "Philippine Brand Dried Mangoes",
+   "expect": "dried-fruit"
+  },
+  {
+   "item": "Banana Ketchup",
+   "expect": "ketchup"
+  },
+  {
+   "item": "Banana Milk (Binggrae)",
+   "expect": "flavored-milk"
+  },
+  {
+   "item": "Coconut Water",
+   "expect": "drinks",
+   "accept": [
+    "juice"
+   ]
+  },
+  {
+   "item": "Jarritos Mandarin",
+   "expect": "soda"
+  },
+  {
+   "item": "Mochi Ice Cream, Mango",
+   "expect": "ice-cream",
+   "accept": [
+    "mochi"
+   ]
+  },
+  {
+   "item": "Green Tea Kit Kat",
+   "expect": "candy",
+   "accept": [
+    "chocolate"
+   ]
+  },
+  {
+   "item": "Goldfish Crackers",
+   "expect": "crackers"
+  },
+  {
+   "item": "Swedish Fish",
+   "expect": "candy"
+  },
+  {
+   "item": "Pork & Chive Dumplings",
+   "expect": "dumplings",
+   "accept": [
+    "potstickers"
+   ]
+  },
+  {
+   "item": "Egg Rolls, frozen",
+   "expect": "spring-rolls"
+  },
+  {
+   "item": "Egg Tarts",
+   "expect": "pastries"
+  },
+  {
+   "item": "Blueberry Muffins 4 pk",
+   "expect": "muffins"
+  },
+  {
+   "item": "Carrot Cake",
+   "expect": "cakes"
+  },
+  {
+   "item": "Clam Chowder",
+   "expect": "soup"
+  },
+  {
+   "item": "Garlic Salt",
+   "expect": "seasoning-mix"
+  },
+  {
+   "item": "Lemon Pepper Seasoning",
+   "expect": "seasoning-mix"
+  },
+  {
+   "item": "Valentina Salsa Picante",
+   "expect": "chili-sauce",
+   "accept": [
+    "cholula-hot-sauce"
+   ]
+  },
+  {
+   "item": "Fish Tofu",
+   "expect": "fish-cakes"
+  },
+  {
+   "item": "Ube Halaya",
+   "expect": "jam"
+  },
+  {
+   "item": "Avocado Oil",
+   "expect": "cooking-oil",
+   "accept": [
+    "neutral-oil"
+   ]
+  },
+  {
+   "item": "Cat Food, Salmon Pate",
+   "expect": null
+  },
+  {
+   "item": "Sushi Rolling Mat",
+   "expect": null
+  },
+  {
+   "item": "Peanut Sauce",
+   "expect": null
+  },
+  {
+   "item": "Three Crabs Fish Sauce",
+   "expect": "fish-sauce"
+  }
+ ],
+ "source": "written for the 2026-10-27 synonyms work"
+}
