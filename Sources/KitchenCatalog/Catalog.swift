@@ -108,7 +108,7 @@ public struct Catalog: Sendable {
         return w.hasSuffix("s") ? String(w.dropLast()) : w
     }
 
-    private static let qualifier = try! NSRegularExpression(pattern: #"^(?:organic|fresh|frozen|large|small|medium|jumbo|extra|select|premium|natural|local|whole|boneless|skinless|bone|skin|in|on|sliced|diced|chopped|bag|pack|package|tray|bunch|ea|each|ct|count|pc|pcs|lb|lbs|oz|fl|kg|g|ml|l|gal|dozen|doz|value|family|club|bulk|assorted|headless|cut|fillet|filet|steak|portion|piece|chunk|point|flat|roll|wing|midjoint|tip|loin|chop|shank|half|jarred|canned|bottle|jar|can|selected|variety|variant|series|size|pk|multi|single|qt|inch|of|to|the|shell|square|fz|live|box|case|regular|light|original|mini|\d+(?:\.\d+)?(?:g|kg|ml|oz|lb|ct|pk)?)$"#)
+    private static let qualifier = try! NSRegularExpression(pattern: #"^(?:organic|fresh|frozen|large|small|medium|jumbo|extra|select|premium|natural|local|whole|boneless|skinless|bone|skin|in|on|sliced|diced|chopped|bag|pack|package|tray|bunch|ea|each|ct|count|pc|pcs|lb|lbs|oz|fl|kg|g|ml|l|gal|dozen|doz|value|family|club|bulk|assorted|headless|cut|fillet|filet|steak|portion|piece|chunk|point|flat|roll|wing|midjoint|tip|loin|chop|shank|half|jarred|canned|bottle|jar|can|selected|variety|variant|series|size|pk|multi|single|qt|inch|of|to|the|shell|square|fz|live|box|case|regular|light|original|mini|roast|firm|soft|up|and|s|h|o|p|d|head|tail|off|peeled|deveined|raw|cooked|\d+(?:\.\d+)?(?:g|kg|ml|oz|lb|ct|pk)?)$"#)
     private static let changesIt: Set<String> = ["soy", "oat", "almond", "coconut", "rice", "plant", "based", "cashew", "chocolate", "strawberry", "banana", "condensed", "evaporated", "powdered", "flavored", "shrimp", "fish"]
 
     private static func isQualifier(_ w: String) -> Bool {
@@ -119,18 +119,31 @@ public struct Catalog: Sendable {
     /// strong matches; weak ones are worth asking about.
     public func match(_ text: String) -> Match? {
         // "Braised croaker with rice cake", "Goat meat w/skin on": the product is what comes before "with".
-        let main = text.range(of: #"\s+(?:with\b|w/)\s*"#, options: [.regularExpression, .caseInsensitive])
+        // (Reading the whole name when that part names nothing was tried: it turned "Braised Yellow Croaker
+        // with Rice Cake" into rice cakes.) "Beef short rib for soup": likewise before "for", but only when
+        // that part names something ("Pork for stew" is stew meat, not pork).
+        let beforeWith = text.range(of: #"\s+(?:with\b|w/)\s*"#, options: [.regularExpression, .caseInsensitive])
             .map { String(text[..<$0.lowerBound]) }
             .flatMap { $0.isEmpty ? nil : $0 } ?? text
+        let beforeFor = beforeWith.range(of: #"\s+for\b\s*"#, options: [.regularExpression, .caseInsensitive])
+            .map { String(beforeWith[..<$0.lowerBound]) }
+            .flatMap { $0.isEmpty ? nil : $0 }
+        let main = beforeFor.flatMap { read($0) != nil ? $0 : nil } ?? beforeWith
         let a = read(main)
         let b = Self.reorder(main).flatMap(read)
         // "Popcorn, Butter Lovers or Movie Theater Butter": when the part before the comma names the
         // product outright, it wins over a flavor or variant after the comma.
-        let pick: (Match, Int)? = switch (a, b) {
+        var pick: (Match, Int)? = switch (a, b) {
         case let (a?, b?): (b.0.strength == .strong && a.0.strength == .strong) || b.1 >= a.1 ? b : a
         case let (a?, nil): a
         case let (nil, b?): b
         default: nil
+        }
+        // "Boneless Beef Top Sirloin Steaks, Premium Beef, Value Pack": with more than one comma and no
+        // strong reading yet, the part before the first comma is the product.
+        if pick?.0.strength != .strong, main.filter({ $0 == "," }).count >= 2,
+           let first = main.split(separator: ",", maxSplits: 1).first, let c = read(String(first)), c.0.strength == .strong {
+            pick = c
         }
         return pick?.0
     }
@@ -150,6 +163,7 @@ public struct Catalog: Sendable {
         while end > 1, Self.isQualifier(words[end - 1]) { end -= 1 }
         let all = " " + words.joined(separator: " ") + " "
         var best: (Match, Int)?
+        var strongIds: Set<String> = []
         for t in terms {
             guard let at = all.range(of: " \(t.term) ") else { continue }
             // At the head: the term ends where the product name ends, give or take trailing qualifiers.
@@ -165,9 +179,16 @@ public struct Catalog: Sendable {
             let overlap = nameWords.filter(rest.contains).count
             let strong = atHead && !changed && (t.words >= 2 || t.isName || end <= 3)
             let score = t.words * 10 + overlap * 3 + (atHead ? 2 : 0) + (t.isName ? 1 : 0) + (strong ? 5 : 0)
+            if strong { strongIds.insert(t.id) }
             if best == nil || score > best!.1, let item = items[t.id] {
                 best = (Match(id: t.id, item: item, term: t.term, strength: strong ? .strong : .weak), score)
             }
+        }
+        // A longer alias found mid-name ("cosmic crisp" in "Cosmic Crisp Apples") is still a strong match
+        // when another name for the same item is at the head.
+        if let found = best, found.0.strength == .weak, strongIds.contains(found.0.id) {
+            let m = found.0
+            best = (Match(id: m.id, item: m.item, term: m.term, strength: .strong), found.1)
         }
         return best
     }

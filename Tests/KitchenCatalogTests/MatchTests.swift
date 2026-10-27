@@ -28,6 +28,16 @@ struct MatchTests {
         ("Cherry Blossom Pork Back Rib (Fresh)", "pork-baby-back-ribs", .strong),
         ("Black Cod Fillet", "sablefish", .strong),
         ("Kokusai Calrose Rice", "rice-medium-grain", .strong),
+        // Found in the Oct 23 re-run: roasts, "for soup", more than one comma.
+        ("Pork Loin Roast", "pork-loin", .strong),
+        ("Cosmic Crisp Apples", "apples", .strong),
+        ("Beef Short Rib For Soup", "beef-short-ribs", .strong),
+        ("Pork For Stew", "pork-stew-meat", .strong),
+        ("Pork shoulder (butt), boneless", "pork-shoulder", .strong),
+        ("Natures Soy Tofu", "tofu", .strong),
+        ("Cabbage Green", "green-cabbage", .strong),
+        ("Boneless Beef Top Sirloin Steaks, Premium Beef, Value Pack", "beef-sirloin", .strong),
+        ("White Shrimp H/O 20-30 - 4 lbs", "shrimp", .strong),
     ])
     func strong(_ text: String, _ id: String, _ strength: Catalog.Strength) {
         let m = c.match(text)

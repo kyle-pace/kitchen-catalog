@@ -11,7 +11,9 @@ const strong = [["Chicken leg quarters, 10 lb", "chicken-leg-quarters"], ["Onion
   // The part before the comma, or before "with", is the product.
   ["Act II Popcorn, Butter Lovers or Movie Theater Butter", "popcorn"], ["Goat Meat w/Skin on", "goat"],
   // Specific beats general.
-  ["Cherry Blossom Pork Back Rib (Fresh)", "pork-baby-back-ribs"], ["Black Cod Fillet", "sablefish"], ["Kokusai Calrose Rice", "rice-medium-grain"]];
+  ["Cherry Blossom Pork Back Rib (Fresh)", "pork-baby-back-ribs"], ["Black Cod Fillet", "sablefish"], ["Kokusai Calrose Rice", "rice-medium-grain"],
+  // Found in the Oct 23 re-run: roasts, "for soup", more than one comma.
+  ["Pork Loin Roast", "pork-loin"], ["Cosmic Crisp Apples", "apples"], ["Beef Short Rib For Soup", "beef-short-ribs"], ["Pork For Stew", "pork-stew-meat"], ["Pork shoulder (butt), boneless", "pork-shoulder"], ["Natures Soy Tofu", "tofu"], ["Cabbage Green", "green-cabbage"], ["Boneless Beef Top Sirloin Steaks, Premium Beef, Value Pack", "beef-sirloin"], ["White Shrimp H/O 20-30 - 4 lbs", "shrimp"]];
 for (const [text, id] of strong) {
   const m = match(c, text);
   if (m?.id !== id || m?.strength !== "strong") { failed++; console.log("FAIL", text, "->", m?.id, m?.strength, "expected", id); }
