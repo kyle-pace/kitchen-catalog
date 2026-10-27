@@ -1630,6 +1630,7 @@
     "heim",
     "oreo",
     "phoenix egg roll",
+    "pocky",
     "shortbread",
     "wafer",
     "wafers"
@@ -2445,7 +2446,6 @@
     "chinese parsley",
     "chives",
     "cilantro",
-    "coriander",
     "coriander leaves",
     "dill",
     "flat-leaf parsley",
@@ -2525,7 +2525,6 @@
     "jjamppong",
     "kimbap",
     "korean stew",
-    "lasagna",
     "pot pie",
     "shepherd's pie",
     "wonton soup"
@@ -2703,6 +2702,7 @@
    "section": "pantry",
    "aliases": [
     "malagkit",
+    "mochi rice",
     "mochigome",
     "sticky rice",
     "sweet rice"
@@ -3304,8 +3304,7 @@
    "name": "Korean Rice Syrup",
    "section": "pantry",
    "aliases": [
-    "jocheong",
-    "rice syrup"
+    "jocheong"
    ]
   },
   "kosher-salt": {
@@ -3551,6 +3550,7 @@
     "deli meat",
     "lunchmeat",
     "pastrami",
+    "roast beef",
     "sliced turkey"
    ]
   },
@@ -3780,7 +3780,7 @@
    "section": "spices",
    "aliases": [
     "monosodium glutamate",
-    "ajinomoto"
+    "aji no moto"
    ]
   },
   "muffins": {
@@ -4313,9 +4313,9 @@
    "name": "Green peas",
    "section": "produce",
    "aliases": [
-    "peas",
     "garden peas",
-    "english peas"
+    "english peas",
+    "sweet peas"
    ]
   },
   "perilla-leaves": {
@@ -4787,6 +4787,7 @@
     "leek pie",
     "onigiri",
     "pork ear",
+    "roast pork",
     "stewed",
     "sticky rice with chinese sausage",
     "stuffed mushrooms",
@@ -5372,9 +5373,8 @@
    "name": "Serrano peppers",
    "section": "produce",
    "aliases": [
-    "serrano",
-    "serranos",
-    "serrano chiles"
+    "serrano chiles",
+    "serrano chilies"
    ]
   },
   "sesame-oil": {
@@ -5622,6 +5622,7 @@
     "canada dry",
     "coca cola",
     "coke",
+    "fanta",
     "grass jelly drink",
     "italian sparkling drink",
     "jarritos",
@@ -5735,7 +5736,8 @@
    "section": "produce",
    "aliases": [
     "acorn squash",
-    "butternut"
+    "butternut",
+    "butternut squash"
    ],
    "deals": {
     "staple": true
@@ -6331,11 +6333,9 @@
    "name": "White Sugar",
    "section": "pantry",
    "aliases": [
-    "cane sugar",
     "caster sugar",
     "granulated sugar",
     "pure cane sugar",
-    "sugar",
     "superfine sugar"
    ],
    "popularity": "everyday"
@@ -6378,7 +6378,6 @@
     "gyoza wrappers",
     "potsticker wrappers",
     "egg roll wrappers",
-    "spring roll wrappers",
     "lumpia wrappers"
    ]
   },

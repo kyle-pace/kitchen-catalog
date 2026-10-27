@@ -41,7 +41,14 @@ async function api(params) {
     const res = await fetch(`${API}?${qs}`, { headers: { "User-Agent": UA } });
     if (res.status === 429 || res.status >= 500) { await sleep(2000 * (attempt + 1)); continue; }
     if (!res.ok) throw new Error(`Wikidata ${res.status} for ${qs}`);
-    const json = await res.json();
+    // Wikidata reports API errors (rate limits, bad parameters) as HTTP 200 with an "error" body, and an outage can
+    // return an HTML page. Neither is an answer, so neither is cached: wait and try again.
+    let json;
+    try { json = await res.json(); } catch { await sleep(2000 * (attempt + 1)); continue; }
+    if (json.error) {
+      if (json.error.code === "maxlag" || json.error.code === "ratelimited") { await sleep(5000 * (attempt + 1)); continue; }
+      throw new Error(`Wikidata error ${json.error.code}: ${json.error.info}`);
+    }
     mkdirSync(cacheDir, { recursive: true });
     writeFileSync(file, JSON.stringify(json));
     await sleep(150); // be polite: well under Wikidata's limits
@@ -109,8 +116,13 @@ async function lookUp() {
   // Who already uses each normalized term, so a candidate that's someone else's name is flagged.
   const owner = new Map(catalog.terms.map((t) => [t.term, t.id]));
   const byName = new Map(Object.entries(raw.items).map(([id, it]) => [normalize(it.name), id]));
-  const lines = flyerLines().map((text) => ({ text, words: ` ${normalize(text.replace(/\([^)]*\)/g, " "))} ` }));
-  const before = new Map(lines.map((l) => [l.text, match(catalog, l.text)?.id ?? null]));
+  const lines = flyerLines().map((text) => ({ text, words: new Set(normalize(text.replace(/\([^)]*\)/g, " ")).split(" ")) }));
+  // Id and strength: weak to strong is the change that matters most, since strong matches are filled in without review.
+  const show = (m) => (m ? `${m.id}${m.strength === "weak" ? " (weak)" : ""}` : "none");
+  const before = new Map(lines.map((l) => [l.text, show(match(catalog, l.text))]));
+  // Accept marks from an earlier run carry over, so a rerun (or --only) doesn't undo review work.
+  const earlier = existsSync(OUT) ? JSON.parse(readFileSync(OUT, "utf8")).items : [];
+  const marked = new Map(earlier.map((r) => [r.id, r]));
   const sortTerms = (terms) => terms.sort((a, b) => b.words - a.words || b.term.length - a.term.length || (b.isName ? 1 : 0) - (a.isName ? 1 : 0));
   const results = [];
   let done = 0;
@@ -132,15 +144,17 @@ async function lookUp() {
       if (owner.has(n) && owner.get(n) !== id) flags.push(`collides with ${owner.get(n)}`);
       if (n.replace(/ /g, "").length <= 3) flags.push("short");
       if (/\d/.test(n)) flags.push("has a number");
-      // Would it change how any known flyer line matches? Only lines containing the words can change.
+      // Would it change how any known flyer line matches? Only lines with all of its words can change (in any order,
+      // since the matcher also reads "Onion - Green" as "green onion").
       const trial = { ...catalog, terms: sortTerms([...catalog.terms, { id, term: n, words: n.split(" ").length, isName: false }]),
         single: n.includes(" ") ? catalog.single : new Set([...catalog.single, n]),
         ownWords: { ...catalog.ownWords, [id]: new Set([...(catalog.ownWords[id] ?? []), ...n.split(" ")]) } };
-      const changes = lines.filter((l) => l.words.includes(` ${n} `))
-        .map((l) => [l.text, before.get(l.text), match(trial, l.text)?.id ?? null]).filter(([, a, b]) => a !== b)
+      const changes = lines.filter((l) => n.split(" ").every((w) => l.words.has(w)))
+        .map((l) => [l.text, before.get(l.text), show(match(trial, l.text))]).filter(([, a, b]) => a !== b)
         .map(([text, a, b]) => `${text}: ${a} -> ${b}`);
       if (changes.length) flags.push("changes");
-      aliases.push({ alias: name, accept: false, flags, ...(changes.length ? { changes: changes.slice(0, 5) } : {}) });
+      const wasAccepted = marked.get(id)?.aliases?.some((x) => x.alias === name && x.accept) ?? false;
+      aliases.push({ alias: name, accept: wasAccepted, flags, ...(changes.length ? { changes: changes.slice(0, 5) } : {}) });
     }
     // "Kind of": P279 (subclass of) and P31 (instance of), when the parent is also a catalog item.
     const up = [...claimIds(hit.entity, "P279"), ...claimIds(hit.entity, "P31")];
@@ -148,18 +162,24 @@ async function lookUp() {
     const parents = Object.entries(upNames)
       .map(([qid, label]) => ({ qid, label, catalog: label ? byName.get(normalize(label)) ?? owner.get(normalize(label)) ?? null : null }))
       .filter((p) => p.catalog && p.catalog !== id)
-      .map((p) => ({ parent: p.catalog, via: `${p.qid} ${p.label}`, current: item.parent ?? null, accept: false }));
+      .map((p) => ({ parent: p.catalog, via: `${p.qid} ${p.label}`, current: item.parent ?? null,
+        accept: marked.get(id)?.parents?.some((x) => x.parent === p.catalog && x.accept) ?? false }));
     results.push({ id, name: item.name, wikidata: { id: hit.id, description: hit.description }, aliases, parents });
   }
+  // Items not looked up this time (--only) keep their earlier candidates.
+  const ran = new Set(results.map((r) => r.id));
+  for (const r of earlier) if (!ran.has(r.id)) results.push(r);
+  results.sort((a, b) => a.id.localeCompare(b.id));
   mkdirSync(dirname(OUT), { recursive: true });
   const about = "Candidates from Wikidata for review. Set accept: true on the ones to keep, then run with --apply. " +
     "flags: collides (another item uses the words), short, changes (known flyer lines would match differently; see changes).";
   writeFileSync(OUT, JSON.stringify({ about, made: new Date().toISOString().slice(0, 10), items: results }, null, 1) + "\n");
-  const n = results.filter((r) => r.wikidata).length;
-  const a = results.reduce((s, r) => s + (r.aliases?.length ?? 0), 0);
-  const clean = results.reduce((s, r) => s + (r.aliases?.filter((x) => !x.flags.length).length ?? 0), 0);
-  const p = results.reduce((s, r) => s + (r.parents?.length ?? 0), 0);
-  console.log(`${n} of ${results.length} items found on Wikidata. ${a} alias candidates (${clean} with no flags), ${p} parent candidates. Wrote ${OUT}`);
+  const now = results.filter((r) => ran.has(r.id));
+  const n = now.filter((r) => r.wikidata).length;
+  const a = now.reduce((s, r) => s + (r.aliases?.length ?? 0), 0);
+  const clean = now.reduce((s, r) => s + (r.aliases?.filter((x) => !x.flags.length).length ?? 0), 0);
+  const p = now.reduce((s, r) => s + (r.parents?.length ?? 0), 0);
+  console.log(`${n} of ${now.length} items found on Wikidata. ${a} alias candidates (${clean} with no flags), ${p} parent candidates. Wrote ${OUT}`);
 }
 
 function apply() {
@@ -172,7 +192,13 @@ function apply() {
     const more = (r.aliases ?? []).filter((a) => a.accept && !item.aliases.includes(a.alias)).map((a) => a.alias);
     if (more.length) { item.aliases.push(...more); item.aliases.sort((x, y) => x.toLowerCase().localeCompare(y.toLowerCase())); added += more.length; }
     const p = (r.parents ?? []).find((x) => x.accept);
-    if (p && raw.items[p.parent]) { item.parent = p.parent; linked++; }
+    if (p && raw.items[p.parent]) {
+      // Never make a loop: the new parent mustn't already be below this item.
+      let up = p.parent, loop = false;
+      for (let n = 0; up && n < 20; up = raw.items[up]?.parent, n++) if (up === r.id) loop = true;
+      if (loop) console.error(`Skipped ${r.id} -> ${p.parent}: it would make a loop.`);
+      else { item.parent = p.parent; linked++; }
+    }
   }
   writeFileSync(CATALOG_PATH, JSON.stringify(raw, null, 1) + "\n");
   console.log(`Added ${added} aliases and ${linked} parent links. Now run: node js/test.mjs && node js/score.mjs`);

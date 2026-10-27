@@ -41,8 +41,15 @@ export function load(path = CATALOG_PATH) {
   terms.sort((a, b) => b.words - a.words || b.term.length - a.term.length || (b.isName ? 1 : 0) - (a.isName ? 1 : 0));
   // One-word names and aliases (for "Chicken & Pork"), and every word in each item's names (for cooking words).
   const single = new Set(terms.filter((t) => t.words === 1).map((t) => t.term));
+  const direct = {};
+  for (const t of terms) for (const w of t.term.split(" ")) (direct[t.id] ??= new Set()).add(w);
+  // An item's own words include its parents' ("dried" for wood ear, a kind of dried mushroom).
   const ownWords = {};
-  for (const t of terms) for (const w of t.term.split(" ")) (ownWords[t.id] ??= new Set()).add(w);
+  for (const id of Object.keys(catalog.items)) {
+    const set = new Set(direct[id]);
+    for (let p = catalog.items[id].parent, n = 0; p && n < 10; p = catalog.items[p]?.parent, n++) for (const w of direct[p] ?? []) set.add(w);
+    ownWords[id] = set;
+  }
   return { ...catalog, terms, single, ownWords };
 }
 
@@ -56,7 +63,8 @@ const CHANGES_IT = new Set(["soy", "oat", "almond", "coconut", "rice", "plant", 
 // A cooking word before an ingredient makes the line a dish, not the grocery: "Braised Yellow Croaker with Rice Cake",
 // "Stewed Pork Trotters", "Spiced Butternut Squash". Such matches are weak (sent to review). Ready-made products
 // ("Glazed Donuts", "Fried Leek Pie") and items with the word in one of their names ("fried dace") are unaffected.
-const DISH = new Set(["braised", "stewed", "spiced", "marinated", "steamed", "grilled", "sauteed", "glazed", "fried", "roasted", "rotisserie"]);
+const DISH = new Set(["braised", "stewed", "spiced", "marinated", "steamed", "grilled", "sauteed", "glazed", "fried", "roasted", "rotisserie",
+  "bbq", "barbecue", "pulled", "salted", "dried", "preserved", "pickled", "sour", "candied"]);
 
 /** "Onion - Green" -> "green onion"; "Onion, yellow boiler" -> "yellow boiler onion" */
 function reorder(text) {
@@ -80,6 +88,7 @@ export function match(catalog, text) {
     const all = ` ${words.join(" ")} `;
     let best = null;
     const strongIds = new Set();
+    const found = [];
     for (const t of catalog.terms) {
       const at = all.indexOf(` ${t.term} `);
       if (at < 0) continue;
@@ -96,6 +105,7 @@ export function match(catalog, text) {
       const strong = atHead && !changed && (t.words >= 2 || t.isName || end <= 3);
       const score = t.words * 10 + overlap * 3 + (atHead ? 2 : 0) + (t.isName ? 1 : 0) + (strong ? 5 : 0);
       if (strong) strongIds.add(t.id);
+      found.push({ t, start: startWord });
       if (!best || score > best.score) best = { id: t.id, item: catalog.items[t.id], term: t.term, strength: strong ? "strong" : "weak", score, start: startWord };
     }
     // A longer alias found mid-name ("cosmic crisp" in "Cosmic Crisp Apples") is still a strong match
@@ -105,6 +115,15 @@ export function match(catalog, text) {
         words.slice(0, best.start).some((w) => DISH.has(w) && !catalog.ownWords[best.id].has(w))) best.strength = "weak";
     // "Hotdogs Chicken & Pork": a grocery, "and", then the item names what the product is made of. Weak.
     if (best && best.strength === "strong" && best.start >= 2 && words[best.start - 1] === "and" && catalog.single.has(words[best.start - 2])) best.strength = "weak";
+    // "Pepsi Wild Cherry", "Hi-Chew Mango": a ready-made product named earlier in the line, then a flavor. The line is
+    // that product, sent to review (the longest such name wins, then the first). Words that are also the matched item's
+    // own ("bun" in "Burger Buns", "soup" in "Soup Mix") don't count.
+    if (best && best.strength === "strong" && !best.item.product) {
+      const own = catalog.ownWords[best.id];
+      const prior = found.filter((f) => catalog.items[f.t.id].product && f.start + f.t.words <= best.start && !f.t.term.split(" ").every((w) => own.has(w)))
+        .sort((a, b) => b.t.words - a.t.words || a.start - b.start)[0];
+      if (prior) best = { id: prior.t.id, item: catalog.items[prior.t.id], term: prior.t.term, strength: "weak", score: best.score, start: prior.start };
+    }
     return best;
   };
   // "Braised croaker with rice cake", "Goat meat w/skin on": the product is what comes before "with".

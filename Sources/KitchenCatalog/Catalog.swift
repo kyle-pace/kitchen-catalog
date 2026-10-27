@@ -86,8 +86,16 @@ public struct Catalog: Sendable {
         // Longest first; on a tie, an item's own name beats someone else's alias.
         self.terms = terms.sorted { ($0.words, $0.term.count, $0.isName ? 1 : 0, $1.id) > ($1.words, $1.term.count, $1.isName ? 1 : 0, $0.id) }
         self.single = Set(terms.filter { $0.words == 1 }.map(\.term))
+        var direct: [String: Set<String>] = [:]
+        for t in terms { direct[t.id, default: []].formUnion(t.term.split(separator: " ").map(String.init)) }
+        // An item's own words include its parents' ("dried" for wood ear, a kind of dried mushroom).
         var own: [String: Set<String>] = [:]
-        for t in terms { own[t.id, default: []].formUnion(t.term.split(separator: " ").map(String.init)) }
+        for (id, item) in items {
+            var set = direct[id] ?? []
+            var p = item.parent, n = 0
+            while let next = p, n < 10 { set.formUnion(direct[next] ?? []); p = items[next]?.parent; n += 1 }
+            own[id] = set
+        }
         self.ownWords = own
     }
 
@@ -120,7 +128,8 @@ public struct Catalog: Sendable {
     // A cooking word before an ingredient makes the line a dish, not the grocery: "Braised Yellow Croaker with Rice Cake",
     // "Stewed Pork Trotters", "Spiced Butternut Squash". Such matches are weak (sent to review). Ready-made products
     // ("Glazed Donuts", "Fried Leek Pie") and items with the word in one of their names ("fried dace") are unaffected.
-    private static let dish: Set<String> = ["braised", "stewed", "spiced", "marinated", "steamed", "grilled", "sauteed", "glazed", "fried", "roasted", "rotisserie"]
+    private static let dish: Set<String> = ["braised", "stewed", "spiced", "marinated", "steamed", "grilled", "sauteed", "glazed", "fried", "roasted", "rotisserie",
+                                            "bbq", "barbecue", "pulled", "salted", "dried", "preserved", "pickled", "sour", "candied"]
 
     private static func isQualifier(_ w: String) -> Bool {
         qualifier.firstMatch(in: w, range: NSRange(w.startIndex..., in: w)) != nil
@@ -178,6 +187,7 @@ public struct Catalog: Sendable {
         var best: (Match, Int)?
         var bestStart = 0
         var strongIds: Set<String> = []
+        var seen: [(term: Term, start: Int)] = []
         for t in terms {
             guard let at = all.range(of: " \(t.term) ") else { continue }
             // At the head: the term ends where the product name ends, give or take trailing qualifiers.
@@ -194,6 +204,7 @@ public struct Catalog: Sendable {
             let strong = atHead && !changed && (t.words >= 2 || t.isName || end <= 3)
             let score = t.words * 10 + overlap * 3 + (atHead ? 2 : 0) + (t.isName ? 1 : 0) + (strong ? 5 : 0)
             if strong { strongIds.insert(t.id) }
+            seen.append((term: t, start: startWord))
             if best == nil || score > best!.1, let item = items[t.id] {
                 best = (Match(id: t.id, item: item, term: t.term, strength: strong ? .strong : .weak), score)
                 bestStart = startWord
@@ -212,6 +223,21 @@ public struct Catalog: Sendable {
             // "Hotdogs Chicken & Pork": a grocery, "and", then the item names what the product is made of. Weak.
             let madeOf = bestStart >= 2 && words[bestStart - 1] == "and" && single.contains(words[bestStart - 2])
             if cooked || madeOf { best = (Match(id: m.id, item: m.item, term: m.term, strength: .weak), found.1) }
+        }
+        // "Pepsi Wild Cherry", "Hi-Chew Mango": a ready-made product named earlier in the line, then a flavor. The line is
+        // that product, sent to review (the longest such name wins, then the first). Words that are also the matched item's
+        // own ("bun" in "Burger Buns", "soup" in "Soup Mix") don't count.
+        if let current = best, current.0.strength == .strong, current.0.item.product != true {
+            let own = ownWords[current.0.id] ?? []
+            let prior = seen
+                .filter { f in
+                    items[f.term.id]?.product == true && f.start + f.term.words <= bestStart
+                        && !f.term.term.split(separator: " ").allSatisfy { word in own.contains(String(word)) }
+                }
+                .min { a, b in (a.term.words, -a.start) > (b.term.words, -b.start) }
+            if let prior, let item = items[prior.term.id] {
+                best = (Match(id: prior.term.id, item: item, term: prior.term.term, strength: .weak), current.1)
+            }
         }
         return best
     }
