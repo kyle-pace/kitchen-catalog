@@ -21,6 +21,10 @@ same thing: `chicken-leg-quarters`.
   2026-10-25 so Grocery Deals can use them too. They have no JavaScript twin, so the parity rule below
   doesn't cover them.
 - `tools/seed.py`: made the first version from Pantry's `pantry.json` and Deals' `config/items.json`.
+- `tools/wikidata-synonyms.mjs`: other names and "kind of" links from Wikidata, for review. Build time only: run it on
+  a machine with internet, read `tools/out/wikidata-candidates.json`, set `"accept": true` on the keepers, then
+  `--apply`. Each candidate is flagged if another item already uses the words, if it's 3 letters or fewer, or if it
+  would change how a known flyer line matches (the answer keys plus `Tests/flyer-lines/`).
 
 ## Rules
 
@@ -30,14 +34,24 @@ same thing: `chicken-leg-quarters`.
 - Matching: the longest name or alias found wins, scored so specific beats general. A match is
   **strong** when the item is what the product is (its last noun, give or take sizes, cuts and words
   like "organic"), and **weak** when it's only mentioned ("Shrimp Chips"). Automated jobs fill in
-  strong matches only and send weak ones for review.
+  strong matches only and send weak ones for review. Two things make a match weak even at the head of the name:
+  a cooking word before an ingredient ("Braised Yellow Croaker", "Stewed Pork Trotters": a dish, not the grocery;
+  ready-made products like "Glazed Donuts" keep theirs), and "X & Y" where X is also a grocery ("Hotdogs Chicken &
+  Pork": what it's made of). A name or alias that says "for" wins over the part before "for" ("Pork For Stew").
 - The Swift and JS matchers must agree: `swift test` and `node js/test.mjs` run the same cases.
 - `node js/coverage.mjs <weeks dir>` reports how much of a set of deal rows the catalog recognizes.
 - `node js/score.mjs` scores the catalog against a hand-labeled answer key (`Tests/answer-keys/`): right,
   close (a parent or child of the right item), wrong, weak and missing. Run it after any catalog or matcher
   change; the number to keep near zero is **strong and wrong**, since those get filled in without review.
-- Generic items (`chicken`, `rice`, `noodles`, `sausage`, `chips`, `soda`...) exist mainly as parents, so specific
-  items roll up and a vague flyer line ("QH Pork Sausage") still lands somewhere sensible.
+- Generic items (`chicken`, `rice`, `noodles`, `sausage`, `chips`, `soda`, and since 2026-10-27 `pork`, `beef`, `fish`,
+  `shellfish`, `seafood`, `cabbage`, `squash`, `leafy-greens`) exist mainly as parents, so specific items roll up, a
+  vague flyer line ("QH Pork Sausage") still lands somewhere sensible, and "any pork?" has an answer. `parent` is one
+  link, so an item can only be a kind of one thing: non-dairy yogurt is a kind of yogurt, which is why there's no
+  `dairy` item. Squid and octopus are seafood but not shellfish.
+- There's no alias "greens": every word is made singular, so it would read as "green", which ends many flyer lines
+  ("Cabbage Green", "Boba Milk Tea Powder, Black or Green"). Search for greens with `leafy-greens` directly.
+- `Tests/flyer-lines/` holds every flyer line Deals has listed, for checking that a catalog change doesn't move
+  matches you didn't mean to move.
 
 ## Using it in the Grocery Deals Friday run
 

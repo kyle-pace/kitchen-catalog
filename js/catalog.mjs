@@ -39,7 +39,11 @@ export function load(path = CATALOG_PATH) {
   }
   // Longest first; on a tie, an item's own name beats someone else's alias.
   terms.sort((a, b) => b.words - a.words || b.term.length - a.term.length || (b.isName ? 1 : 0) - (a.isName ? 1 : 0));
-  return { ...catalog, terms };
+  // One-word names and aliases (for "Chicken & Pork"), and every word in each item's names (for cooking words).
+  const single = new Set(terms.filter((t) => t.words === 1).map((t) => t.term));
+  const ownWords = {};
+  for (const t of terms) for (const w of t.term.split(" ")) (ownWords[t.id] ??= new Set()).add(w);
+  return { ...catalog, terms, single, ownWords };
 }
 
 // Words that describe a product without changing what it is: "organic", "5 lb bag", "fresh",
@@ -48,6 +52,11 @@ const QUALIFIER = /^(?:organic|fresh|frozen|large|small|medium|jumbo|extra|selec
 
 // A word just before a one-word item that makes it a different product: soy milk isn't milk.
 const CHANGES_IT = new Set(["soy", "oat", "almond", "coconut", "rice", "plant", "based", "cashew", "chocolate", "strawberry", "banana", "condensed", "evaporated", "powdered", "flavored", "shrimp", "fish"]);
+
+// A cooking word before an ingredient makes the line a dish, not the grocery: "Braised Yellow Croaker with Rice Cake",
+// "Stewed Pork Trotters", "Spiced Butternut Squash". Such matches are weak (sent to review). Ready-made products
+// ("Glazed Donuts", "Fried Leek Pie") and items with the word in one of their names ("fried dace") are unaffected.
+const DISH = new Set(["braised", "stewed", "spiced", "marinated", "steamed", "grilled", "sauteed", "glazed", "fried", "roasted", "rotisserie"]);
 
 /** "Onion - Green" -> "green onion"; "Onion, yellow boiler" -> "yellow boiler onion" */
 function reorder(text) {
@@ -87,11 +96,15 @@ export function match(catalog, text) {
       const strong = atHead && !changed && (t.words >= 2 || t.isName || end <= 3);
       const score = t.words * 10 + overlap * 3 + (atHead ? 2 : 0) + (t.isName ? 1 : 0) + (strong ? 5 : 0);
       if (strong) strongIds.add(t.id);
-      if (!best || score > best.score) best = { id: t.id, item: catalog.items[t.id], term: t.term, strength: strong ? "strong" : "weak", score };
+      if (!best || score > best.score) best = { id: t.id, item: catalog.items[t.id], term: t.term, strength: strong ? "strong" : "weak", score, start: startWord };
     }
     // A longer alias found mid-name ("cosmic crisp" in "Cosmic Crisp Apples") is still a strong match
     // when another name for the same item is at the head.
     if (best && best.strength === "weak" && strongIds.has(best.id)) best.strength = "strong";
+    if (best && best.strength === "strong" && !best.item.product &&
+        words.slice(0, best.start).some((w) => DISH.has(w) && !catalog.ownWords[best.id].has(w))) best.strength = "weak";
+    // "Hotdogs Chicken & Pork": a grocery, "and", then the item names what the product is made of. Weak.
+    if (best && best.strength === "strong" && best.start >= 2 && words[best.start - 1] === "and" && catalog.single.has(words[best.start - 2])) best.strength = "weak";
     return best;
   };
   // "Braised croaker with rice cake", "Goat meat w/skin on": the product is what comes before "with".
@@ -100,7 +113,10 @@ export function match(catalog, text) {
   // that part names something ("Pork for stew" is stew meat, not pork).
   const beforeWith = String(text).split(/\s+(?:with\b|w\/)\s*/i)[0] || String(text);
   const beforeFor = beforeWith.split(/\s+for\b\s*/i)[0];
-  const main = beforeFor && beforeFor !== beforeWith && read(beforeFor) ? beforeFor : beforeWith;
+  // ...unless a name or alias that itself says "for" is what the whole line is ("pork for stew", "beef for stew").
+  const whole = read(beforeWith);
+  const saysFor = whole?.strength === "strong" && whole.term.split(" ").includes("for");
+  const main = !saysFor && beforeFor && beforeFor !== beforeWith && read(beforeFor) ? beforeFor : beforeWith;
   const a = read(main);
   const r = reorder(main);
   const b = r ? read(r) : null;
@@ -114,6 +130,6 @@ export function match(catalog, text) {
     if (c?.strength === "strong") pick = c;
   }
   if (!pick) return null;
-  const { score, ...result } = pick;
+  const { score, start, ...result } = pick;
   return result;
 }

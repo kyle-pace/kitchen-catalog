@@ -13,14 +13,32 @@ const strong = [["Chicken leg quarters, 10 lb", "chicken-leg-quarters"], ["Onion
   // Specific beats general.
   ["Cherry Blossom Pork Back Rib (Fresh)", "pork-baby-back-ribs"], ["Black Cod Fillet", "sablefish"], ["Kokusai Calrose Rice", "rice-medium-grain"],
   // Found in the Oct 23 re-run: roasts, "for soup", more than one comma.
-  ["Pork Loin Roast", "pork-loin"], ["Cosmic Crisp Apples", "apples"], ["Beef Short Rib For Soup", "beef-short-ribs"], ["Pork For Stew", "pork-stew-meat"], ["Pork shoulder (butt), boneless", "pork-shoulder"], ["Natures Soy Tofu", "tofu"], ["Cabbage Green", "green-cabbage"], ["Boneless Beef Top Sirloin Steaks, Premium Beef, Value Pack", "beef-sirloin"], ["White Shrimp H/O 20-30 - 4 lbs", "shrimp"]];
+  ["Pork Loin Roast", "pork-loin"], ["Cosmic Crisp Apples", "apples"], ["Beef Short Rib For Soup", "beef-short-ribs"], ["Pork For Stew", "pork-stew-meat"], ["Pork shoulder (butt), boneless", "pork-shoulder"], ["Natures Soy Tofu", "tofu"], ["Cabbage Green", "green-cabbage"], ["Boneless Beef Top Sirloin Steaks, Premium Beef, Value Pack", "beef-sirloin"], ["White Shrimp H/O 20-30 - 4 lbs", "shrimp"],
+  // Other names (2026-10-27): regional and market names, and broad words for the search box.
+  ["Coriander", "fresh-herbs"], ["Pak Choi", "bok-choy"], ["Rocket", "arugula"], ["Capsicum", "bell-peppers"], ["Gai Choy", "mustard-greens"],
+  ["Korean Chili Powder", "gochugaru"], ["Chili Powder", "chili-powder"], ["Bean Sprouts", "bean-sprouts"], ["Lap Cheong", "sausage"],
+  ["Bangus", "milkfish"], ["Pork", "pork"], ["Whole Fish", "fish"], ["Beef For Stew", "beef-stew"], ["Passion Fruit Juice", "juice"],
+  ["Katsu Shredded Cabbage", "green-cabbage"]];
 for (const [text, id] of strong) {
   const m = match(c, text);
   if (m?.id !== id || m?.strength !== "strong") { failed++; console.log("FAIL", text, "->", m?.id, m?.strength, "expected", id); }
 }
-for (const text of ["Oreo Savory Chicken Flavor/ Vintage Popcorn Flavor"]) {
+// A dish or a mix, not the grocery: cooking words before an ingredient, and "X & Y" where Y is what it's made of.
+for (const text of ["Oreo Savory Chicken Flavor/ Vintage Popcorn Flavor", "Braised Yellow Croaker with Rice Cake", "Stewed Pork Trotters",
+  "Metropolitan Market Spiced Butternut Squash", "MP Hotdogs Chicken & Pork Jumbo"]) {
   const m = match(c, text);
   if (m?.strength === "strong") { failed++; console.log("FAIL", text, "should not be strong ->", m.id); }
+}
+// Ready-made products keep their cooking words: glazed donuts are donuts.
+for (const [text, id] of [["Sweet P's Glazed Donuts", "donuts"], ["Fried Leek Pie", "prepared-meals"]]) {
+  const m = match(c, text);
+  if (m?.id !== id || m?.strength !== "strong") { failed++; console.log("FAIL", text, "->", m?.id, m?.strength, "expected", id); }
+}
+// Kind-of links: every parent exists, and a few broad words sit above the items they cover.
+for (const [id, item] of Object.entries(c.items)) if (item.parent && !c.items[item.parent]) { failed++; console.log("FAIL", id, "has a missing parent", item.parent); }
+const up = (id) => { const o = []; let p = c.items[id]?.parent; while (p && o.length < 10) { o.push(p); p = c.items[p]?.parent; } return o; };
+for (const [id, p] of [["pork-belly-sliced", "pork"], ["beef-sirloin", "beef"], ["salmon-sockeye", "seafood"], ["clams", "shellfish"], ["kabocha-squash", "squash"], ["purple-napa-cabbage", "cabbage"]]) {
+  if (!up(id).includes(p)) { failed++; console.log("FAIL", id, "should be a kind of", p, "->", up(id).join(" > ")); }
 }
 console.log(failed ? `${failed} failed` : "all passed");
 process.exit(failed ? 1 : 0);

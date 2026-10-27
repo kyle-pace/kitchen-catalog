@@ -38,6 +38,25 @@ struct MatchTests {
         ("Cabbage Green", "green-cabbage", .strong),
         ("Boneless Beef Top Sirloin Steaks, Premium Beef, Value Pack", "beef-sirloin", .strong),
         ("White Shrimp H/O 20-30 - 4 lbs", "shrimp", .strong),
+        // Other names (2026-10-27): regional and market names, and broad words for the search box.
+        ("Coriander", "fresh-herbs", .strong),
+        ("Pak Choi", "bok-choy", .strong),
+        ("Rocket", "arugula", .strong),
+        ("Capsicum", "bell-peppers", .strong),
+        ("Gai Choy", "mustard-greens", .strong),
+        ("Korean Chili Powder", "gochugaru", .strong),
+        ("Chili Powder", "chili-powder", .strong),
+        ("Bean Sprouts", "bean-sprouts", .strong),
+        ("Lap Cheong", "sausage", .strong),
+        ("Bangus", "milkfish", .strong),
+        ("Pork", "pork", .strong),
+        ("Whole Fish", "fish", .strong),
+        ("Beef For Stew", "beef-stew", .strong),
+        ("Passion Fruit Juice", "juice", .strong),
+        ("Katsu Shredded Cabbage", "green-cabbage", .strong),
+        // Ready-made products keep their cooking words: glazed donuts are donuts.
+        ("Sweet P's Glazed Donuts", "donuts", .strong),
+        ("Fried Leek Pie", "prepared-meals", .strong),
     ])
     func strong(_ text: String, _ id: String, _ strength: Catalog.Strength) {
         let m = c.match(text)
@@ -45,9 +64,25 @@ struct MatchTests {
         #expect(m?.strength == strength)
     }
 
-    @Test(arguments: ["Oreo Savory Chicken Flavor/ Vintage Popcorn Flavor"])
+    /// A dish or a mix, not the grocery: cooking words before an ingredient, and "X & Y" where Y is what it's made of.
+    @Test(arguments: ["Oreo Savory Chicken Flavor/ Vintage Popcorn Flavor", "Braised Yellow Croaker with Rice Cake", "Stewed Pork Trotters",
+                      "Metropolitan Market Spiced Butternut Squash", "MP Hotdogs Chicken & Pork Jumbo"])
     func notStrong(_ text: String) {
         #expect(c.match(text)?.strength != .strong)
+    }
+
+    /// Kind-of links: every parent exists, and a few broad words sit above the items they cover.
+    @Test func kindsOf() {
+        for (id, item) in c.items { if let p = item.parent { #expect(c.items[p] != nil, "\(id) has a missing parent \(p)") } }
+        func up(_ id: String) -> [String] {
+            var out: [String] = [], p = c.items[id]?.parent
+            while let next = p, out.count < 10 { out.append(next); p = c.items[next]?.parent }
+            return out
+        }
+        for (id, p) in [("pork-belly-sliced", "pork"), ("beef-sirloin", "beef"), ("salmon-sockeye", "seafood"), ("clams", "shellfish"),
+                        ("kabocha-squash", "squash"), ("purple-napa-cabbage", "cabbage")] {
+            #expect(up(id).contains(p), "\(id) should be a kind of \(p)")
+        }
     }
 
     @Test func oldIDsStillResolve() {
