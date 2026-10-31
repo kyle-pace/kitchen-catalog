@@ -10,7 +10,7 @@ let package = Package(
     platforms: [.iOS(.v26), .macOS(.v26)],
     products: [.library(name: "KitchenCatalog", targets: ["KitchenCatalog"])],
     targets: [
-        .target(name: "KitchenCatalog", resources: [.copy("Resources/catalog.json")]),
+        .target(name: "KitchenCatalog", resources: [.copy("Resources/catalog.json"), .copy("Resources/seasons.json")]),
         .testTarget(name: "KitchenCatalogTests", dependencies: ["KitchenCatalog"]),
     ]
 )
