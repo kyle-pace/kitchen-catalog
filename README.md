@@ -13,6 +13,15 @@ same thing: `chicken-leg-quarters`.
     rather than cook with. Missing means an ingredient. On Hand can leave products out of recipe matching and the
     starter pantry; Grocery Deals still gets an id for every flyer line.
   - `sections`: store sections, in shopping order.
+- `Sources/KitchenCatalog/Resources/seasons.json`: **what's in season** in the Seattle area (since 2026-10-31). One
+  entry per seasonal item: `id` (never changes), `label`, catalog `items` (kinds of them count too), extra `words`
+  ("fuyu", "hachiya"), `from` and `to` as month-day (both count, can wrap the new year), the KitchenUI `buddy` that
+  stands for it, an optional `star` kind to look for, a `tagline` and `facts` (with **bold** lead words). Grocery Deals'
+  site builds a page and the app a card for each item in season; Maitake shows a card on Home from it, with no network.
+  Site-only presentation (colors, page copy, share image) lives in Grocery Deals' `config/seasons.json` under the same id.
+  Swift: `Seasons.on(.now)`, `season.matches(itemID:name:)`, `season.endDate(after:)`. JS: `js/seasons.mjs`.
+  Both run `Tests/season-cases.json`. Adding an item: an entry here (plus a character in KitchenUI's `Buddy`, or leave
+  `buddy` out), then `npm run sync-catalog` and an entry in the site's `config/seasons.json`.
 - Swift (`import KitchenCatalog`): `Catalog.shared.match("Onion - Green")` -> `green-onion`, strong.
 - JavaScript (`js/catalog.mjs`): `match(load(), text)`, the same rules, for the Friday run and the site.
 - Swift only (`Sources/KitchenCatalog/Text/`): `Parser` (recipe lines to name, alternates and prep), `Names`,

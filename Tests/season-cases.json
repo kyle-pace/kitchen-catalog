@@ -1,0 +1,280 @@
+{
+  "about": "Shared cases for js/seasons.mjs and Seasons.swift. `on`: the season ids that include a day. `ends`: the last day of the season that includes (or next ends after) a day. `mentions`: names that do or don't mention the season's item. `star`: names that are or aren't the star kind. `covers`: catalog ids that do or don't belong. Fixture seasons are made up, so the cases stay true when the real calendar changes. `matches`: [season, catalog id or null, name, expected] against the shipped catalog.",
+  "fixture": [
+    {
+      "id": "wraps",
+      "label": "Persimmons",
+      "items": [
+        "persimmons"
+      ],
+      "words": [
+        "persimmon",
+        "fuyu",
+        "hachiya",
+        "hoshigaki"
+      ],
+      "from": "09-15",
+      "to": "01-15",
+      "star": {
+        "label": "Fuyu",
+        "words": [
+          "fuyu"
+        ]
+      },
+      "facts": []
+    },
+    {
+      "id": "summer",
+      "label": "Rainier cherries",
+      "items": [
+        "cherries"
+      ],
+      "words": [
+        "rainier"
+      ],
+      "from": "06-15",
+      "to": "07-31",
+      "facts": []
+    }
+  ],
+  "on": [
+    [
+      "2026-09-14",
+      []
+    ],
+    [
+      "2026-09-15",
+      [
+        "wraps"
+      ]
+    ],
+    [
+      "2026-12-31",
+      [
+        "wraps"
+      ]
+    ],
+    [
+      "2027-01-01",
+      [
+        "wraps"
+      ]
+    ],
+    [
+      "2027-01-15",
+      [
+        "wraps"
+      ]
+    ],
+    [
+      "2027-01-16",
+      []
+    ],
+    [
+      "2026-06-15",
+      [
+        "summer"
+      ]
+    ],
+    [
+      "2026-07-31",
+      [
+        "summer"
+      ]
+    ],
+    [
+      "2026-08-01",
+      []
+    ],
+    [
+      "10-30",
+      [
+        "wraps"
+      ]
+    ]
+  ],
+  "ends": [
+    [
+      "wraps",
+      "2026-10-30",
+      "2027-01-15"
+    ],
+    [
+      "wraps",
+      "2027-01-02",
+      "2027-01-15"
+    ],
+    [
+      "wraps",
+      "2026-06-01",
+      "2027-01-15"
+    ],
+    [
+      "summer",
+      "2026-07-01",
+      "2026-07-31"
+    ],
+    [
+      "summer",
+      "2026-03-01",
+      "2026-07-31"
+    ],
+    [
+      "summer",
+      "2026-08-10",
+      "2027-07-31"
+    ]
+  ],
+  "mentions": [
+    [
+      "wraps",
+      "Fuyu Persimmons, jumbo",
+      true
+    ],
+    [
+      "wraps",
+      "Persimmon",
+      true
+    ],
+    [
+      "wraps",
+      "Hachiya",
+      true
+    ],
+    [
+      "wraps",
+      "Fuyu Persimmon (Korea)",
+      true
+    ],
+    [
+      "wraps",
+      "Persimmon Vinegar",
+      true
+    ],
+    [
+      "wraps",
+      "Kaki-no-tane rice crackers",
+      false
+    ],
+    [
+      "wraps",
+      "Apples, Fuji",
+      false
+    ],
+    [
+      "summer",
+      "Rainier Cherries",
+      true
+    ],
+    [
+      "summer",
+      "Bing Cherries",
+      false
+    ],
+    [
+      "summer",
+      "Cherry Tomatoes",
+      false
+    ]
+  ],
+  "star": [
+    [
+      "wraps",
+      "Fuyu Persimmons",
+      true
+    ],
+    [
+      "wraps",
+      "FUYU PERSIMMON 3 LB",
+      true
+    ],
+    [
+      "wraps",
+      "Hachiya Persimmons",
+      false
+    ],
+    [
+      "wraps",
+      "Persimmons",
+      false
+    ],
+    [
+      "summer",
+      "Rainier Cherries",
+      false
+    ]
+  ],
+  "covers": [
+    [
+      "wraps",
+      "persimmons",
+      true
+    ],
+    [
+      "wraps",
+      "apples",
+      false
+    ],
+    [
+      "summer",
+      "cherries",
+      true
+    ]
+  ],
+  "matches": [
+    [
+      "wraps",
+      null,
+      "Fuyu Persimmon (California), jumbo",
+      true
+    ],
+    [
+      "wraps",
+      "persimmons",
+      "Organic Fuyu Persimmons",
+      true
+    ],
+    [
+      "wraps",
+      null,
+      "Persimmon Vinegar",
+      true
+    ],
+    [
+      "wraps",
+      null,
+      "Hoshigaki",
+      true
+    ],
+    [
+      "wraps",
+      "apples",
+      "Fuji apples",
+      false
+    ],
+    [
+      "summer",
+      null,
+      "Rainier Cherries",
+      true
+    ],
+    [
+      "summer",
+      null,
+      "Cherry Tomatoes",
+      false
+    ],
+    [
+      "wraps",
+      null,
+      "Kawakami 100% Apple Juice",
+      false
+    ],
+    [
+      "summer",
+      null,
+      "Pastry Mitten Pie Slices, ube coconut or rainier cherry",
+      false
+    ]
+  ]
+}
