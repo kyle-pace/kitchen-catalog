@@ -45,7 +45,7 @@ for (const [id, p] of [["pork-belly-sliced", "pork"], ["beef-sirloin", "beef"], 
 
 // Seasons: the same cases as SeasonTests.swift (Tests/season-cases.json).
 {
-  const { inSeason, seasonsOn, seasonEnd, mentions, isStar, coversItem, loadSeasons } = await import("./seasons.mjs");
+  const { inSeason, seasonsOn, seasonEnd, mentions, isStar, coversItem, matches, loadSeasons } = await import("./seasons.mjs");
   const { readFileSync } = await import("node:fs");
   const cases = JSON.parse(readFileSync(new URL("../Tests/season-cases.json", import.meta.url), "utf8"));
   const byId = Object.fromEntries(cases.fixture.map((s) => [s.id, s]));
@@ -59,6 +59,7 @@ for (const [id, p] of [["pork-belly-sliced", "pork"], ["beef-sirloin", "beef"], 
   }
   for (const [id, text, want] of cases.mentions) if (mentions(byId[id], text) !== want) { failed++; console.log("FAIL season mentions", id, text, "expected", want); }
   for (const [id, text, want] of cases.star) if (isStar(byId[id], text) !== want) { failed++; console.log("FAIL season star", id, text, "expected", want); }
+  for (const [id, key, name, want] of cases.matches) if (matches(byId[id], c, { key, name }) !== want) { failed++; console.log("FAIL season matches", id, key, name, "expected", want); }
   for (const [id, item, want] of cases.covers) if (coversItem(byId[id], c, item) !== want) { failed++; console.log("FAIL season covers", id, item, "expected", want); }
   // The real calendar: ids are unique, every item exists, dates are real month-days, inSeason agrees with seasonsOn.
   const real = loadSeasons();

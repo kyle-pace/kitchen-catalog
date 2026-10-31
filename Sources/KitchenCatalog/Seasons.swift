@@ -117,9 +117,14 @@ public struct Season: Sendable, Decodable, Identifiable, Hashable {
         return star.words.contains { words.contains(Catalog.normalize($0)) }
     }
 
-    /// A deal or pantry line counts when its catalog id is covered or its name mentions the item.
+    /// Does a deal or pantry line belong to the season? Its catalog id decides when it has one (a
+    /// known `itemID`, or else what the name matches in the catalog, strong or weak): "Pastry Mitten
+    /// Pie Slices, fuji apple" is pastries, not apples. Only a name the catalog doesn't know
+    /// ("Hoshigaki") falls back to the season's words.
     public func matches(itemID: String?, name: String, in catalog: Catalog = .shared) -> Bool {
-        (itemID.map { covers(itemID: $0, in: catalog) } ?? false) || mentions(name)
+        let known = itemID.flatMap { catalog.items[$0] != nil ? $0 : catalog.item($0)?.id }
+        if let id = known ?? catalog.match(name)?.id { return covers(itemID: id, in: catalog) }
+        return mentions(name)
     }
 
     static func monthDay(_ date: Date, calendar: Calendar) -> String {

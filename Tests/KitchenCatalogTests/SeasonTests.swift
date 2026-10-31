@@ -11,18 +11,21 @@ struct SeasonTests {
         let mentions: [[Value]]
         let star: [[Value]]
         let covers: [[Value]]
+        let matches: [[Value]]
     }
 
     /// The JSON mixes strings, lists of strings and booleans in one row.
     private enum Value: Decodable {
-        case text(String), list([String]), flag(Bool)
+        case text(String), list([String]), flag(Bool), missing
         init(from decoder: Decoder) throws {
             let c = try decoder.singleValueContainer()
-            if let b = try? c.decode(Bool.self) { self = .flag(b) }
+            if c.decodeNil() { self = .missing }
+            else if let b = try? c.decode(Bool.self) { self = .flag(b) }
             else if let s = try? c.decode(String.self) { self = .text(s) }
             else { self = .list(try c.decode([String].self)) }
         }
         var text: String { if case .text(let s) = self { s } else { "" } }
+        var optionalText: String? { if case .text(let s) = self { s } else { nil } }
         var list: [String] { if case .list(let l) = self { l } else { [] } }
         var flag: Bool { if case .flag(let b) = self { b } else { false } }
     }
@@ -63,6 +66,12 @@ struct SeasonTests {
     @Test func coversCatalogItems() {
         for row in cases.covers {
             #expect(fixture(row[0].text).covers(itemID: row[1].text) == row[2].flag, "\(row[0].text): \(row[1].text)")
+        }
+    }
+
+    @Test func linesMatchBySeasonAndCatalog() {
+        for row in cases.matches {
+            #expect(fixture(row[0].text).matches(itemID: row[1].optionalText, name: row[2].text) == row[3].flag, "\(row[0].text): \(row[2].text)")
         }
     }
 

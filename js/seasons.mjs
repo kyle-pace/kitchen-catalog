@@ -3,7 +3,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { normalize } from "./catalog.mjs";
+import { normalize, match } from "./catalog.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 export const SEASONS_PATH = join(here, "..", "Sources", "KitchenCatalog", "Resources", "seasons.json");
@@ -53,7 +53,14 @@ export function isStar(season, text) {
   return season.star.words.some((w) => words.has(normalize(w)));
 }
 
-/** A deal or pantry line counts when its catalog id is covered or its name mentions the item. */
+/**
+ * Does a deal or pantry line belong to the season? Its catalog id decides when it has one (a known
+ * `key`, or else what the name matches in the catalog, strong or weak): "Pastry Mitten Pie Slices,
+ * fuji apple" is pastries, not apples. Only a name the catalog doesn't know ("Hoshigaki") falls
+ * back to the season's words. `catalog` is the loaded catalog (load() in catalog.mjs).
+ */
 export function matches(season, catalog, { key, name }) {
-  return (key != null && coversItem(season, catalog, key)) || mentions(season, name ?? "");
+  const id = key != null && catalog?.items?.[key] ? key : catalog?.terms ? match(catalog, name ?? "")?.id : null;
+  if (id) return coversItem(season, catalog, id);
+  return mentions(season, name ?? "");
 }
