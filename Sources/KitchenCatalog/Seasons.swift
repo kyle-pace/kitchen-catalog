@@ -1,7 +1,6 @@
 import Foundation
 
-/// What's in season in the Seattle area (Resources/seasons.json), shared by Grocery Deals and
-/// Maitake. Same rules as js/seasons.mjs; both run Tests/season-cases.json.
+/// What's in season in the Seattle area (Resources/seasons.json), used by Grocery Deals. Same rules as js/seasons.mjs; both run Tests/season-cases.json.
 public struct Season: Sendable, Decodable, Identifiable, Hashable {
     /// The kind to look for, if there is one: Fuyu among persimmons.
     public struct Star: Sendable, Decodable, Hashable {
@@ -9,7 +8,7 @@ public struct Season: Sendable, Decodable, Identifiable, Hashable {
         public let words: [String]
     }
 
-    /// Never changes; Grocery Deals' feed and Maitake's settings key on it.
+    /// Never changes; Grocery Deals' feed, its page addresses and saved hides key on it.
     public let id: String
     /// "Persimmons"
     public let label: String

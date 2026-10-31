@@ -17,7 +17,7 @@ same thing: `chicken-leg-quarters`.
   entry per seasonal item: `id` (never changes), `label`, catalog `items` (kinds of them count too), extra `words`
   ("fuyu", "hachiya"), `from` and `to` as month-day (both count, can wrap the new year), the KitchenUI `buddy` that
   stands for it, an optional `star` kind to look for, a `tagline` and `facts` (with **bold** lead words). Grocery Deals'
-  site builds a page and the app a card for each item in season; Maitake shows a card on Home from it, with no network.
+  site builds a page and the app a card for each item in season. (A Maitake Home card was tried and dropped on 2026-10-31.)
   Site-only presentation (colors, page copy, share image) lives in Grocery Deals' `config/seasons.json` under the same id.
   Swift: `Seasons.on(.now)`, `season.matches(itemID:name:)`, `season.endDate(after:)`. JS: `js/seasons.mjs`.
   Both run `Tests/season-cases.json`. Adding an item: an entry here (plus a character in KitchenUI's `Buddy`, or leave
